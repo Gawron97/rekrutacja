@@ -19,5 +19,8 @@ public class MaturaExam {
     private Long id;
     @OneToMany(mappedBy = "maturaExam")
     private Set<PassingSubject> passingSubjects;
+    @OneToOne
+    @JoinColumn(name = "id_document")
+    private Document document;
 
 }

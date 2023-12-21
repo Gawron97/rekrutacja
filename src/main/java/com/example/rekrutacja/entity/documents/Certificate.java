@@ -21,5 +21,8 @@ public class Certificate {
     private CertificateType certificateType;
     private Double result;
     private LocalDate validityDate;
+    @OneToOne
+    @JoinColumn(name = "id_document")
+    private Document document;
 
 }

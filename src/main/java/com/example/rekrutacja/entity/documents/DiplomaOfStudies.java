@@ -23,5 +23,8 @@ public class DiplomaOfStudies {
     private LocalDate EndDate;
     @Enumerated(value = EnumType.STRING)
     private DegreeOfStudy degreeOfStudy;
+    @OneToOne
+    @JoinColumn(name = "id_document")
+    private Document document;
 
 }
