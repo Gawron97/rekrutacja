@@ -21,7 +21,7 @@ public class Certificate {
     private CertificateType certificateType;
     private Double result;
     private LocalDate validityDate;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_document")
     private Document document;
 

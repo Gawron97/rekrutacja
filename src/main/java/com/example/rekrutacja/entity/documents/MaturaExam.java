@@ -19,7 +19,7 @@ public class MaturaExam {
     private Long id;
     @OneToMany(mappedBy = "maturaExam")
     private Set<PassingSubject> passingSubjects;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_document")
     private Document document;
 

@@ -23,7 +23,7 @@ public class Application {
     @ManyToOne
     @JoinColumn(name = "id_recruitment")
     private Recruitment recruitment;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_document")
     private Document document;
 
