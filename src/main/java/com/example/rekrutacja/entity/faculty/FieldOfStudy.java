@@ -19,6 +19,7 @@ public class FieldOfStudy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     @Enumerated(value = EnumType.STRING)
     private StudyMode studyMode;
     @Enumerated(value = EnumType.STRING)

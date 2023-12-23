@@ -21,6 +21,8 @@ public class Certificate {
     private CertificateType certificateType;
     private Double result;
     private LocalDate validityDate;
+    @Enumerated(value = EnumType.STRING)
+    private DocumentStatus documentStatus;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_document")
     private Document document;

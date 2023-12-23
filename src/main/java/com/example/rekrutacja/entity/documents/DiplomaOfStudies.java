@@ -23,6 +23,8 @@ public class DiplomaOfStudies {
     private LocalDate EndDate;
     @Enumerated(value = EnumType.STRING)
     private DegreeOfStudy degreeOfStudy;
+    @Enumerated(value = EnumType.STRING)
+    private DocumentStatus documentStatus;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_document")
     private Document document;
