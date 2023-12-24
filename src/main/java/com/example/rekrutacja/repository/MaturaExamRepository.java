@@ -11,17 +11,13 @@ public interface MaturaExamRepository extends JpaRepository<MaturaExam, Long> {
 
     @Query("SELECT me " +
             "FROM MaturaExam me " +
-            "JOIN me.document d " +
-            "JOIN d.candidate c " +
-            "JOIN me.passingSubjects ps " +
-            "WHERE c.id = :candidateId")
+            "WHERE me.candidate.id = :candidateId")
     Optional<MaturaExam> findAllByCandidateId(Long candidateId);
+
 
     @Query("SELECT COUNT(me) = 0 " +
             "FROM MaturaExam me " +
-            "JOIN me.document d " +
-            "JOIN d.candidate c " +
-            "WHERE c.id = :candidateId AND me.documentStatus = 'UNAPPROVED' ")
+            "WHERE me.candidate.id = :candidateId AND me.documentStatus = 'UNAPPROVED'")
     Boolean checkIfAllDocumentsAreApprovedForCandidate(Long candidateId);
 
 }

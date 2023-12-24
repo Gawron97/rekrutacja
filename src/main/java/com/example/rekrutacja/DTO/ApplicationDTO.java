@@ -30,7 +30,6 @@ public class ApplicationDTO {
                 .preferencesNumber(savedApplication.getPreferencesNumber())
                 .applicationStatus(savedApplication.getApplicationStatus())
                 .recruitmentId(savedApplication.getRecruitment().getId())
-                .documentId(savedApplication.getDocument().getId())
                 .build();
     }
 }

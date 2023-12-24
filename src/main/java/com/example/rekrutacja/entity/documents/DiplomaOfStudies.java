@@ -3,21 +3,19 @@ package com.example.rekrutacja.entity.documents;
 import com.example.rekrutacja.entity.faculty.DegreeOfStudy;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Data
-@Builder
+@SuperBuilder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiplomaOfStudies {
+public class DiplomaOfStudies extends Document {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Double grade;
     private String fieldOfStudyName;
     private LocalDate EndDate;
@@ -25,8 +23,5 @@ public class DiplomaOfStudies {
     private DegreeOfStudy degreeOfStudy;
     @Enumerated(value = EnumType.STRING)
     private DocumentStatus documentStatus;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_document")
-    private Document document;
 
 }

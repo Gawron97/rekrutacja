@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
-    Optional<Candidate> findByAppUser_Login(String login);
+    Optional<Candidate> findByLogin(String login);
 
 }

@@ -40,7 +40,8 @@ public class ApplicationService {
                 .preferencesNumber(application.getPreferencesNumber())
                 .applicationStatus(ApplicationStatus.SANDED)
                 .recruitment(recruitment)
-                .document(createDocument(candidate))
+                .candidate(candidate)
+                .addDate(LocalDateTime.now())
                 .build();
 
         Application savedApplication = applicationRepository.save(newApplication);
@@ -106,7 +107,7 @@ public class ApplicationService {
     }
 
     private Candidate getCandidateByLogin(String login) {
-        return candidateRepository.findByAppUser_Login(login).orElseThrow(RuntimeException::new);
+        return candidateRepository.findByLogin(login).orElseThrow(RuntimeException::new);
     }
 
 }

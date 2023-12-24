@@ -5,22 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Data
-@Builder
+@SuperBuilder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Candidate {
+public class Candidate extends AppUser {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private LocalDate birthDate;
-
-    @OneToOne
-    @JoinColumn(name = "id_app_user", nullable = false)
-    private AppUser appUser;
 
 }

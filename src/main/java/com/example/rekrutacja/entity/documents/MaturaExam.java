@@ -5,24 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
 @Data
-@Builder
+@SuperBuilder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class MaturaExam {
+public class MaturaExam extends Document {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @OneToMany(mappedBy = "maturaExam")
     private Set<PassingSubject> passingSubjects;
     @Enumerated(value = EnumType.STRING)
     private DocumentStatus documentStatus;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_document")
-    private Document document;
 
 }

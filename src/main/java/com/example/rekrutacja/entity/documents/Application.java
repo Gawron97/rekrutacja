@@ -6,16 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Application {
+public class Application extends Document {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Double recruitmentIndicator;
     private Integer preferencesNumber;
     @Enumerated(value = EnumType.STRING)
@@ -23,9 +22,5 @@ public class Application {
     @ManyToOne
     @JoinColumn(name = "id_recruitment")
     private Recruitment recruitment;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_document")
-    private Document document;
-
 
 }
