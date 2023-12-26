@@ -1,14 +1,18 @@
 package com.example.rekrutacja.service;
 
 import com.example.rekrutacja.DTO.ApplicationDTO;
+import com.example.rekrutacja.DTO.ApplicationDetailsDTO;
+import com.example.rekrutacja.DTO.ApplicationInfoDTO;
 import com.example.rekrutacja.entity.Recruitment;
 import com.example.rekrutacja.entity.documents.*;
 import com.example.rekrutacja.entity.faculty.Criteria;
 import com.example.rekrutacja.entity.users.Candidate;
 import com.example.rekrutacja.repository.*;
+import com.example.rekrutacja.utils.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +55,7 @@ public class ApplicationService {
 
     private void checkApplicationDuplicationForRecruitment(Recruitment recruitment) {
         if(applicationRepository.existsByRecruitment(recruitment)) {
-            throw new RuntimeException(); // duplikacja podan
+            throw new ApplicationDuplicationException();
         }
     }
 
@@ -67,12 +71,19 @@ public class ApplicationService {
 
     private Set<PassingSubject> getPassedSubjectsAndValidateCriteria(Long fieldOfStudyId, Long candidateId) {
         List<Criteria> criterias = getCriterias(fieldOfStudyId);
-        Set<PassingSubject> passedSubjects = getPassedSubjectsNames(candidateId);
+        Set<PassingSubject> passedSubjects;
+        try {
+            passedSubjects = getPassedSubjectsNames(candidateId);
+        } catch (MaturaExamNotFound e) {
+            throw new CriteriaNotAchievedException(MessageFormat.format("Required criteria for" +
+                    " field of study with id: {0} not achieved", fieldOfStudyId));
+        }
         Set<String> passedSubjectsName = passedSubjects.stream().map(PassingSubject::getName).collect(Collectors.toSet());
 
         criterias.forEach(criteria -> {
             if(!passedSubjectsName.contains(criteria.getName())) {
-                throw new RuntimeException(); // niespelnione kryteria
+                throw new CriteriaNotAchievedException(MessageFormat.format("Required criteria for" +
+                        " field of study with id: {0} not achieved", fieldOfStudyId));
             }
         });
         return passedSubjects;
@@ -87,7 +98,7 @@ public class ApplicationService {
     }
 
     private MaturaExam getCandidateMaturaExam(Long candidateId) {
-        return maturaExamRepository.findAllByCandidateId(candidateId).orElseThrow(RuntimeException::new);
+        return maturaExamRepository.findAllByCandidateId(candidateId).orElseThrow(MaturaExamNotFound::new);
     }
 
     private List<Criteria> getCriterias(Long fieldOfStudyId) {
@@ -96,7 +107,7 @@ public class ApplicationService {
 
 
     private Recruitment getRecruitmentById(Long id) {
-        return recruitmentRepository.findById(id).orElseThrow(RuntimeException::new);
+        return recruitmentRepository.findById(id).orElseThrow(RecruitmentNotFoundException::new);
     }
 
     private Document createDocument(Candidate candidate) {
@@ -107,7 +118,19 @@ public class ApplicationService {
     }
 
     private Candidate getCandidateByLogin(String login) {
-        return candidateRepository.findByLogin(login).orElseThrow(RuntimeException::new);
+        return candidateRepository.findByLogin(login).orElseThrow(CandidateNotFoundException::new);
+    }
+
+    public List<ApplicationInfoDTO> getApplications() {
+        return applicationRepository.getApplicationsInfo();
+    }
+
+    public ApplicationDetailsDTO getApplicationDetails(Long id) {
+        return ApplicationDetailsDTO.of(getApplicationById(id));
+    }
+
+    private Application getApplicationById(Long id) {
+        return applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
     }
 
 }
