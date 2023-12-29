@@ -37,4 +37,9 @@ public class AppExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
 
+    @ExceptionHandler(LoginException.class)
+    public ResponseEntity<String> applicationNotFoundException(LoginException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
 }

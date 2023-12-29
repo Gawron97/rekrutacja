@@ -1,5 +1,5 @@
 package com.example.rekrutacja.entity;
 
-public enum Role {
+public enum AppUserRole {
     ADMIN, ADMINISTRATION_EMPLOYEE, CANDIDATE
 }
