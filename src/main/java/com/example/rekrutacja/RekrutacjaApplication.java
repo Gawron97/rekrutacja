@@ -1,20 +1,10 @@
 package com.example.rekrutacja;
 
-import com.example.rekrutacja.entity.Role;
-import com.example.rekrutacja.entity.documents.Application;
-import com.example.rekrutacja.entity.documents.ApplicationStatus;
-import com.example.rekrutacja.entity.documents.DocumentStatus;
-import com.example.rekrutacja.entity.documents.MaturaExam;
-import com.example.rekrutacja.entity.users.Candidate;
-import com.example.rekrutacja.entity.users.Employee;
 import com.example.rekrutacja.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class RekrutacjaApplication implements CommandLineRunner {
