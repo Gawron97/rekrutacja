@@ -1,16 +1,20 @@
 package com.example.rekrutacja.utils;
 
+import com.example.rekrutacja.entity.AppUserRole;
 import com.example.rekrutacja.entity.Recruitment;
-import com.example.rekrutacja.entity.Role;
 import com.example.rekrutacja.entity.documents.*;
 import com.example.rekrutacja.entity.faculty.*;
+import com.example.rekrutacja.entity.users.AppUser;
 import com.example.rekrutacja.entity.users.Candidate;
 import com.example.rekrutacja.entity.users.Employee;
 import com.example.rekrutacja.repository.*;
 import com.github.javafaker.Faker;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -21,34 +25,77 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Component
+@Slf4j
+@Profile("dev")
 @RequiredArgsConstructor
-@Configuration
-public class DataGenerator {
+public class PostConstructMockDataCreator {
 
+    private final Faker faker = new Faker();
+    private final PasswordEncoder passwordEncoder;
+
+    private final AppUserRepository userRepository;
     private final ApplicationRepository applicationRepository;
-    private final AppUserRepository appUserRepository;
     private final CandidateRepository candidateRepository;
     private final CertificateRepository certificateRepository;
     private final CriteriaRepository criteriaRepository;
     private final DiplomaOfStudiesRepository diplomaOfStudiesRepository;
-    private final DocumentRepository documentRepository;
     private final EmployeeRepository employeeRepository;
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final MaturaExamRepository maturaExamRepository;
-    private final MessageRepository messageRepository;
-    private final PassingSubjectRepository passingSubjectRepository;
-    private final PreferencesTestRepository preferencesTestRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final SpecializationRepository specializationRepository;
-    private final Faker faker = new Faker();
-    private final PasswordEncoder passwordEncoder;
 
     private final List<String> fieldOfStudyNames = List.of("Informatyka", "Matematyka", "Medycyna");
     private final List<String> specialisationNames = List.of("Robotyka", "Wiezowce", "Przeszczepy");
     private final List<String> passingSubjectsNames = List.of("Matematyka", "Geografia", "Polski");
 
-    public void generateData() {
+    @PostConstruct
+    public void init() {
+        if(userRepository.count() > 0)
+            return;
 
+        log.info("Creating mock data in database...");
+        createUsers();
+        generateData();
+        log.info("Mock data successfully created!");
+    }
+
+    private void createUsers() {
+        var admin = createUserWithProperties(
+                "admin",
+                "pass",
+                AppUserRole.ADMIN
+        );
+        var user = createUserWithProperties(
+                "candidate",
+                "pass",
+                AppUserRole.CANDIDATE
+        );
+        var administration = createUserWithProperties(
+                "administration",
+                "pass",
+                AppUserRole.ADMINISTRATION_EMPLOYEE
+        );
+
+        userRepository.save(admin);
+        userRepository.save(user);
+        userRepository.save(administration);
+    }
+
+    private AppUser createUserWithProperties(String username, String password, AppUserRole role) {
+        return AppUser.builder()
+                .name("name")
+                .surname("surname")
+                .login(username)
+                .password(passwordEncoder.encode(password))
+                .role(role)
+                .pesel("12345678901")
+                .email(username + "@example.com")
+                .build();
+    }
+
+    public void generateData() {
         generateEmployees();
         generateCandidates();
         generateSpecialisations();
@@ -62,7 +109,6 @@ public class DataGenerator {
         generateRecruitments(4, fieldOfStudies);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
         generateApplications(10, recruitments);
-
     }
 
     private LocalDate getRandomDateBetween(LocalDate minDate, LocalDate maxDate) {
@@ -79,7 +125,7 @@ public class DataGenerator {
                 .email(faker.internet().emailAddress())
                 .password(passwordEncoder.encode("1234"))
                 .login("emp1")
-                .role(Role.ADMINISTRATION_EMPLOYEE)
+                .role(AppUserRole.ADMINISTRATION_EMPLOYEE)
                 .isEnabled(true)
                 .build();
 
@@ -91,7 +137,7 @@ public class DataGenerator {
                 .email(faker.internet().emailAddress())
                 .password(passwordEncoder.encode("1234"))
                 .login("admin1")
-                .role(Role.ADMIN)
+                .role(AppUserRole.ADMIN)
                 .isEnabled(true)
                 .build();
 
@@ -107,7 +153,7 @@ public class DataGenerator {
                 .email(faker.internet().emailAddress())
                 .password(passwordEncoder.encode("1234"))
                 .login("user1")
-                .role(Role.CANDIDATE)
+                .role(AppUserRole.CANDIDATE)
                 .isEnabled(true)
                 .build();
 
@@ -119,7 +165,7 @@ public class DataGenerator {
                 .email(faker.internet().emailAddress())
                 .password(passwordEncoder.encode("1234"))
                 .login("user2")
-                .role(Role.CANDIDATE)
+                .role(AppUserRole.CANDIDATE)
                 .isEnabled(true)
                 .build();
 
@@ -249,7 +295,4 @@ public class DataGenerator {
             applicationRepository.save(application);
         }
     }
-
-
-
 }

@@ -1,6 +1,6 @@
 package com.example.rekrutacja.entity.users;
 
-import com.example.rekrutacja.entity.Role;
+import com.example.rekrutacja.entity.AppUserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +28,7 @@ public class AppUser implements UserDetails {
     private String password;
     private String email;
     @Enumerated(value = EnumType.STRING)
-    private Role role;
+    private AppUserRole role;
     private Boolean isEnabled;
 
     @Override
@@ -37,13 +37,8 @@ public class AppUser implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
     public String getUsername() {
-        return null;
+        return login;
     }
 
     @Override
