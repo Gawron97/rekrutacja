@@ -25,7 +25,7 @@ public class ApplicationService {
     private final CandidateRepository candidateRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final MaturaExamRepository maturaExamRepository;
-    private final CriteriaRepository criteriaRepository;
+    private final FieldOfStudyRepository fieldOfStudyRepository;
 
     public ApplicationDTO addApplication(ApplicationDTO application, String appUserLogin) {
 
@@ -101,7 +101,7 @@ public class ApplicationService {
     }
 
     private List<Criteria> getCriterias(Long fieldOfStudyId) {
-        return criteriaRepository.findAllByFieldOfStudiesName(fieldOfStudyId);
+        return fieldOfStudyRepository.findAllCriteriaForFieldOfStudy(fieldOfStudyId);
     }
 
 

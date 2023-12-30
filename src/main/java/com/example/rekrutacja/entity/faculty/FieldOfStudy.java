@@ -7,13 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Data
 @Builder
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 public class FieldOfStudy {
 
@@ -29,5 +29,20 @@ public class FieldOfStudy {
 
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Specialisation> specialisations;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "field_of_studies_criterias",
+            joinColumns = @JoinColumn(name = "id_field_of_study"),
+            inverseJoinColumns = @JoinColumn(name = "id_criteria"))
+    private Set<Criteria> criterias;
+
+    public FieldOfStudy() {
+        specialisations = new HashSet<>();
+        criterias = new HashSet<>();
+    }
+
+    public void addCriteria(Criteria criteria) {
+        criterias.add(criteria);
+    }
 
 }

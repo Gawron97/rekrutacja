@@ -18,7 +18,7 @@ public class DiplomaOfStudies extends Document {
 
     private Double grade;
     private String fieldOfStudyName;
-    private LocalDate EndDate;
+    private LocalDate endDate;
     @Enumerated(value = EnumType.STRING)
     private DegreeOfStudy degreeOfStudy;
     @Enumerated(value = EnumType.STRING)

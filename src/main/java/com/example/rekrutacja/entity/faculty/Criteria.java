@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.print.attribute.standard.MediaSize;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,14 +24,8 @@ public class Criteria {
     private String description;
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "field_of_studies_criterias",
-    joinColumns = @JoinColumn(name = "id_criteria"),
-    inverseJoinColumns = @JoinColumn(name = "id_field_of_study"))
-    private List<FieldOfStudy> fieldOfStudies;
     @ManyToOne
     @JoinColumn(name = "id_specialisation")
     private Specialisation specialisation;
-
 
 }

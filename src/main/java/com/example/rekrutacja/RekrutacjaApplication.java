@@ -8,11 +8,13 @@ import com.example.rekrutacja.entity.documents.MaturaExam;
 import com.example.rekrutacja.entity.users.Candidate;
 import com.example.rekrutacja.entity.users.Employee;
 import com.example.rekrutacja.repository.*;
+import com.example.rekrutacja.utils.DataGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -37,12 +39,17 @@ public class RekrutacjaApplication implements CommandLineRunner {
     @Autowired
     ApplicationRepository applicationRepository;
 
+    @Autowired
+    DataGenerator dataGenerator;
+
     public static void main(String[] args) {
         SpringApplication.run(RekrutacjaApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
+
+        dataGenerator.generateData();
 
 //        Candidate candidate = Candidate.builder()
 //                .birthDate(LocalDate.now())

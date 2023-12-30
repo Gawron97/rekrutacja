@@ -29,6 +29,7 @@ public class AppUser implements UserDetails {
     private String email;
     @Enumerated(value = EnumType.STRING)
     private Role role;
+    private Boolean isEnabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -62,6 +63,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isEnabled;
     }
 }
