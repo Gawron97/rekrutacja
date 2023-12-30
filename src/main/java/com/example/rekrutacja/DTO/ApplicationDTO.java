@@ -2,6 +2,7 @@ package com.example.rekrutacja.DTO;
 
 import com.example.rekrutacja.entity.documents.Application;
 import com.example.rekrutacja.entity.documents.ApplicationStatus;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,8 @@ public class ApplicationDTO {
     @NotNull
     private Integer preferencesNumber;
     private ApplicationStatus applicationStatus;
-    @NotNull
-    private Long recruitmentId;
-    private Long documentId;
+    @NotBlank
+    private String fieldOfStudy;
 
     public static ApplicationDTO of(Application savedApplication) {
         return ApplicationDTO.builder()
@@ -29,7 +29,7 @@ public class ApplicationDTO {
                 .recruitmentIndicator(savedApplication.getRecruitmentIndicator())
                 .preferencesNumber(savedApplication.getPreferencesNumber())
                 .applicationStatus(savedApplication.getApplicationStatus())
-                .recruitmentId(savedApplication.getRecruitment().getId())
+                .fieldOfStudy(savedApplication.getRecruitment().getFieldOfStudy().getName())
                 .build();
     }
 }

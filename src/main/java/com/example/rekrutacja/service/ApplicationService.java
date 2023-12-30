@@ -1,7 +1,6 @@
 package com.example.rekrutacja.service;
 
 import com.example.rekrutacja.DTO.ApplicationDTO;
-import com.example.rekrutacja.DTO.ApplicationDetailsDTO;
 import com.example.rekrutacja.DTO.ApplicationInfoDTO;
 import com.example.rekrutacja.entity.Recruitment;
 import com.example.rekrutacja.entity.documents.*;
@@ -31,7 +30,7 @@ public class ApplicationService {
     public ApplicationDTO addApplication(ApplicationDTO application, String appUserLogin) {
 
         Candidate candidate = getCandidateByLogin(appUserLogin);
-        Recruitment recruitment = getRecruitmentById(application.getRecruitmentId());
+        Recruitment recruitment = getRecruitmentByFieldOfStudyName(application.getFieldOfStudy());
         validateApprovedDocuments(candidate.getId());
         Set<PassingSubject> passedSubjects =
                 getPassedSubjectsAndValidateCriteria(recruitment.getFieldOfStudy().getId(), candidate.getId());
@@ -106,8 +105,9 @@ public class ApplicationService {
     }
 
 
-    private Recruitment getRecruitmentById(Long id) {
-        return recruitmentRepository.findById(id).orElseThrow(RecruitmentNotFoundException::new);
+    private Recruitment getRecruitmentByFieldOfStudyName(String name) {
+        return recruitmentRepository.findRecruitmentByFieldOfStudy_Name(name)
+                .orElseThrow(RecruitmentNotFoundException::new);
     }
 
     private Document createDocument(Candidate candidate) {
@@ -122,11 +122,11 @@ public class ApplicationService {
     }
 
     public List<ApplicationInfoDTO> getApplications() {
-        return applicationRepository.getApplicationsInfo();
+        return applicationRepository.findAll().stream().map(ApplicationInfoDTO::of).toList();
     }
 
-    public ApplicationDetailsDTO getApplicationDetails(Long id) {
-        return ApplicationDetailsDTO.of(getApplicationById(id));
+    public ApplicationInfoDTO getApplicationDetails(Long id) {
+        return ApplicationInfoDTO.of(getApplicationById(id));
     }
 
     private Application getApplicationById(Long id) {
