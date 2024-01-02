@@ -1,4 +1,4 @@
-package com.example.rekrutacja.service;
+package com.example.rekrutacja.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

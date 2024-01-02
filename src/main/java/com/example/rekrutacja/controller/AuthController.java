@@ -2,7 +2,7 @@ package com.example.rekrutacja.controller;
 
 import com.example.rekrutacja.DTO.AuthResponse;
 import com.example.rekrutacja.DTO.LoginRequest;
-import com.example.rekrutacja.service.AuthService;
+import com.example.rekrutacja.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

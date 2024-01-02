@@ -1,4 +1,4 @@
-package com.example.rekrutacja.service;
+package com.example.rekrutacja.service.auth;
 
 import com.example.rekrutacja.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AppUserService implements UserDetailsService {
 
-    private final AppUserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findAppUserByLogin(username).orElseThrow(
-                () -> new UsernameNotFoundException("User with username " + username + " not found")
+        return appUserRepository.findAppUserByLogin(username).orElseThrow(
+                () -> new UsernameNotFoundException("User not found")
         );
     }
 }
