@@ -1,6 +1,7 @@
 package com.example.rekrutacja.utils.config.filter;
 
-import com.example.rekrutacja.service.JwtService;
+import com.example.rekrutacja.service.auth.JwtService;
+import com.example.rekrutacja.service.auth.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(

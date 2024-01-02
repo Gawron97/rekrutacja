@@ -1,5 +1,6 @@
 package com.example.rekrutacja.utils.config;
 
+import com.example.rekrutacja.service.auth.UserDetailsServiceImpl;
 import com.example.rekrutacja.utils.config.filter.CORSFilter;
 import com.example.rekrutacja.utils.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
