@@ -3,7 +3,6 @@ package com.example.rekrutacja.service.auth;
 import com.example.rekrutacja.DTO.AuthResponse;
 import com.example.rekrutacja.DTO.LoginRequest;
 import com.example.rekrutacja.entity.AppUserRole;
-import com.example.rekrutacja.repository.AppUserRepository;
 import com.example.rekrutacja.utils.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +17,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserDetailsServiceImpl userDetailsService;
+    private final AppUserService appUserService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -27,7 +26,7 @@ public class AuthService {
         UserDetails user;
 
         try {
-            user = userDetailsService.loadUserByUsername(request.login());
+            user = appUserService.loadUserByUsername(request.login());
         } catch (UsernameNotFoundException e) {
             throw new LoginException("Bad username or password");
         }
