@@ -1,7 +1,6 @@
 package com.example.rekrutacja.utils.config.filter;
 
 import com.example.rekrutacja.service.auth.JwtService;
-import com.example.rekrutacja.service.auth.AppUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final AppUserService appUserService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
         }
 
         String jwt = authHeader.substring(7);
-        UserDetails user = appUserService.loadUserByUsername(jwtService.extractUsername(jwt));
+        UserDetails user = userDetailsService.loadUserByUsername(jwtService.extractUsername(jwt));
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 user,
                 null,

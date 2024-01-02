@@ -7,6 +7,7 @@ import com.example.rekrutacja.utils.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final AppUserService appUserService;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -26,7 +27,7 @@ public class AuthService {
         UserDetails user;
 
         try {
-            user = appUserService.loadUserByUsername(request.login());
+            user = userDetailsService.loadUserByUsername(request.login());
         } catch (UsernameNotFoundException e) {
             throw new LoginException("Bad username or password");
         }
