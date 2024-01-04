@@ -1,5 +1,6 @@
 package com.example.rekrutacja.entity;
 
+import com.example.rekrutacja.entity.documents.Application;
 import com.example.rekrutacja.entity.faculty.FieldOfStudy;
 import com.example.rekrutacja.entity.faculty.Specialization;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -42,4 +44,6 @@ public class Recruitment {
     @JoinColumn(name = "id_specialisation")
     private Specialization specialization;
 
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Application> applications;
 }

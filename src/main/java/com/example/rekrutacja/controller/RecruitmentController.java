@@ -2,6 +2,7 @@ package com.example.rekrutacja.controller;
 
 import com.example.rekrutacja.DTO.recruitment.RecruitmentDTO;
 import com.example.rekrutacja.DTO.recruitment.RecruitmentShortDTO;
+import com.example.rekrutacja.DTO.recruitment.RecruitmentRequest;
 import com.example.rekrutacja.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,23 @@ public class RecruitmentController {
 
     @GetMapping("/{id}")
     public RecruitmentDTO getRecruitmentById(@PathVariable Long id) {
-        return recruitmentService.getRecruitmentById(id);
+        return recruitmentService.getRecruitmentDTOById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteRecruitmentById(@PathVariable Long id) {
+        recruitmentService.deleteRecruitmentById(id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateRecruitmentById(
+            @PathVariable Long id,
+            @RequestBody RecruitmentRequest newData) {
+        recruitmentService.updateRecruitmentById(id, newData);
+    }
+
+    @PostMapping
+    public void createRecruitment(@RequestBody RecruitmentRequest recruitmentDTO) {
+        recruitmentService.createRecruitment(recruitmentDTO);
     }
 }

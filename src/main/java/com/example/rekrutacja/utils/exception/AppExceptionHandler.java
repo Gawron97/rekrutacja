@@ -42,4 +42,14 @@ public class AppExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
 
+    @ExceptionHandler(FieldOfStudyNotFoundException.class)
+    public ResponseEntity<String> applicationNotFoundException(FieldOfStudyNotFoundException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(SpecializationNotFoundException.class)
+    public ResponseEntity<String> applicationNotFoundException(SpecializationNotFoundException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
 }

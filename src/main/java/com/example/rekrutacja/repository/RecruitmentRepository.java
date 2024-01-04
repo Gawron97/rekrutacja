@@ -12,6 +12,12 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> 
 
     Optional<Recruitment> findRecruitmentByFieldOfStudy_Name(String name);
 
-    @Query("SELECT r FROM Recruitment r WHERE r.fieldOfStudy.name LIKE %?1% OR r.cycle LIKE %?1%")
-    Page<Recruitment> findRecruitmentByFieldOfStudyOrCycleName(String search, Pageable pageable);
+    @Query("""
+            SELECT r
+            FROM Recruitment r
+            WHERE
+                LOWER(r.fieldOfStudy.name) LIKE LOWER(CONCAT('%', :search, '%')) OR
+                LOWER(r.cycle) LIKE LOWER(CONCAT('%', :search, '%'))
+            """)
+    Page<Recruitment> findRecruitmentsByFieldOfStudyOrCycleName(String search, Pageable pageable);
 }
