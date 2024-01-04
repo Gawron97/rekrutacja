@@ -1,7 +1,7 @@
 package com.example.rekrutacja.entity;
 
 import com.example.rekrutacja.entity.faculty.FieldOfStudy;
-import com.example.rekrutacja.entity.faculty.Specialisation;
+import com.example.rekrutacja.entity.faculty.Specialization;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,10 +19,19 @@ public class Recruitment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer cycle;
+
+    @Column(nullable = false, length = 64)
+    private String cycle;
+
+    @Column(nullable = false)
     private LocalDateTime startDate;
+
+    @Column(nullable = false)
     private LocalDateTime endDate;
+
+    @Column(nullable = false)
     private Integer capacity;
+
     private Double thresholdPoints;
 
     @ManyToOne
@@ -31,6 +40,6 @@ public class Recruitment {
 
     @OneToOne
     @JoinColumn(name = "id_specialisation")
-    private Specialisation specialisation;
+    private Specialization specialization;
 
 }

@@ -1,5 +1,6 @@
 package com.example.rekrutacja.utils.config;
 
+import com.example.rekrutacja.entity.AppUserRole;
 import com.example.rekrutacja.utils.config.filter.CORSFilter;
 import com.example.rekrutacja.utils.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/test").permitAll()
+
+                        .requestMatchers("/recruitment/**").hasRole(AppUserRole.ADMINISTRATION_EMPLOYEE.name())
                         .anyRequest().permitAll() // This turns off security. TODO: turn on when required
                 )
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

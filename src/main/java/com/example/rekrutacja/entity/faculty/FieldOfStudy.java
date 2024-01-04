@@ -1,14 +1,11 @@
 package com.example.rekrutacja.entity.faculty;
 
-import com.example.rekrutacja.entity.PreferencesTest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -28,7 +25,7 @@ public class FieldOfStudy {
     private String recruitmentRateTemplate;
 
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Set<Specialisation> specialisations;
+    private Set<Specialization> specialisations;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "field_of_studies_criterias",
