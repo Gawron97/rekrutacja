@@ -7,11 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.print.attribute.standard.MediaSize;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 @Data
 @Builder
 @Entity
@@ -26,6 +21,6 @@ public class Criteria {
 
     @ManyToOne
     @JoinColumn(name = "id_specialisation")
-    private Specialisation specialisation;
+    private Specialization specialisation;
 
 }

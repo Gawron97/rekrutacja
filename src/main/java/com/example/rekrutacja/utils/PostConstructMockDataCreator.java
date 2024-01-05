@@ -175,7 +175,7 @@ public class PostConstructMockDataCreator {
 
     private void generateSpecialisations() {
         specialisationNames.forEach(specialisationName -> {
-            Specialisation specialization = Specialisation.builder()
+            Specialization specialization = Specialization.builder()
                     .name(specialisationName)
                     .build();
             specializationRepository.save(specialization);
@@ -271,7 +271,7 @@ public class PostConstructMockDataCreator {
                     LocalDate.of(2023, 12, 12));
 
             Recruitment recruitment = Recruitment.builder()
-                    .cycle(faker.number().numberBetween(1, 10))
+                    .cycle("2023/2024")
                     .startDate(LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate.toEpochDay()), ZoneId.systemDefault()))
                     .endDate(LocalDateTime.ofInstant(Instant.ofEpochMilli(endDate.toEpochDay()), ZoneId.systemDefault()))
                     .capacity(faker.number().numberBetween(1, 150))

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Specialisation {
+public class Specialization {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

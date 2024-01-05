@@ -2,6 +2,7 @@ package com.example.rekrutacja.service;
 
 import com.example.rekrutacja.entity.faculty.FieldOfStudy;
 import com.example.rekrutacja.repository.FieldOfStudyRepository;
+import com.example.rekrutacja.utils.exception.FieldOfStudyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,9 @@ public class FieldOfStudyService {
         return fieldOfStudyRepository.findAll().stream().map(FieldOfStudy::getName).toList();
     }
 
+    public FieldOfStudy getFieldOfStudyById(Long id) {
+        return fieldOfStudyRepository.findById(id).orElseThrow(
+                () -> new FieldOfStudyNotFoundException("Field of study with id " + id + " not found")
+        );
+    }
 }
