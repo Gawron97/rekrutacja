@@ -30,8 +30,8 @@ public class RecruitmentService {
      * */
     public Page<RecruitmentShortDTO> getRecruitmentsShort(PageRequest pageable, String search) {
         return recruitmentRepository
-                .findRecruitmentsByFieldOfStudyOrCycleName(search, pageable)
-                .map(r -> new RecruitmentShortDTO(r.getId(), r.getFieldOfStudy().getName() + " " + r.getCycle()));
+                .findRecruitmentsByFieldOfStudyOrCycleOrSpecializationName(search, pageable)
+                .map(r -> new RecruitmentShortDTO(r.getId(), createTitle(r)));
     }
 
     public Recruitment getRecruitmentById(Long id) {
@@ -83,5 +83,11 @@ public class RecruitmentService {
             recruitment.setSpecialization(specializationService.getSpecializationById(recruitmentDTO.specializationId()));
 
         recruitmentRepository.save(recruitment);
+    }
+
+    private String createTitle(Recruitment recruitment) {
+        return recruitment.getFieldOfStudy().getName() +
+                (recruitment.getSpecialization() != null ? " Spec. " + recruitment.getSpecialization().getName() : "") + " " +
+                recruitment.getCycle();
     }
 }

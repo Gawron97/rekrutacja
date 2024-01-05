@@ -47,7 +47,7 @@ public class PostConstructMockDataCreator {
     private final SpecializationRepository specializationRepository;
 
     private final List<String> fieldOfStudyNames = List.of("Informatyka", "Matematyka", "Medycyna");
-    private final List<String> specialisationNames = List.of("Robotyka", "Wiezowce", "Przeszczepy");
+    private final List<String> specialisationNames = List.of("Robotyka", "AI", "Design");
     private final List<String> passingSubjectsNames = List.of("Matematyka", "Geografia", "Polski");
 
     @PostConstruct
@@ -109,6 +109,7 @@ public class PostConstructMockDataCreator {
         generateRecruitments(4, fieldOfStudies);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
         generateApplications(10, recruitments);
+        generateSpecializationsAndLinkToRecruitments(recruitments);
     }
 
     private LocalDate getRandomDateBetween(LocalDate minDate, LocalDate maxDate) {
@@ -281,6 +282,26 @@ public class PostConstructMockDataCreator {
 
             recruitmentRepository.save(recruitment);
         }
+
+
+    }
+
+    private void generateSpecializationsAndLinkToRecruitments(List<Recruitment> recruitments) {
+        List<Specialization> specializations = specializationRepository.findAll();
+        recruitments.forEach(recruitment -> {
+            Specialization specialization = specializations.get(faker.number().numberBetween(0, specializations.size()));
+            recruitment.setSpecialization(specialization);
+        });
+        recruitmentRepository.saveAll(recruitments);
+    }
+
+    private void generateSpecializations() {
+        specialisationNames.forEach(specialisationName -> {
+            Specialization specialization = Specialization.builder()
+                    .name(specialisationName)
+                    .build();
+            specializationRepository.save(specialization);
+        });
     }
 
     private void generateApplications(int quantity, List<Recruitment> recruitments) {

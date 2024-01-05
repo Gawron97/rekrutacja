@@ -17,7 +17,9 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> 
             FROM Recruitment r
             WHERE
                 LOWER(r.fieldOfStudy.name) LIKE LOWER(CONCAT('%', :search, '%')) OR
-                LOWER(r.cycle) LIKE LOWER(CONCAT('%', :search, '%'))
+                LOWER(r.cycle) LIKE LOWER(CONCAT('%', :search, '%')) OR
+                r.specialization IS NOT NULL AND
+                LOWER(r.specialization.name) LIKE LOWER(CONCAT('%', :search, '%'))
             """)
-    Page<Recruitment> findRecruitmentsByFieldOfStudyOrCycleName(String search, Pageable pageable);
+    Page<Recruitment> findRecruitmentsByFieldOfStudyOrCycleOrSpecializationName(String search, Pageable pageable);
 }

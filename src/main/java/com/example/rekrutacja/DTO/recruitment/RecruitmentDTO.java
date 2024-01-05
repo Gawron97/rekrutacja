@@ -16,6 +16,7 @@ public record RecruitmentDTO(
         LocalDateTime endDate,
         Integer capacity,
         FieldOfStudyDTO fieldOfStudy,
-        SpecializationDTO specialization
+        SpecializationDTO specialization,
+        Double thresholdPoints
 ) {
 }
