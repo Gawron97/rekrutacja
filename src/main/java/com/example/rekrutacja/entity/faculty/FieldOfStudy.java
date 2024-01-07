@@ -16,12 +16,17 @@ public class FieldOfStudy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     @Enumerated(value = EnumType.STRING)
     private StudyMode studyMode;
+
     @Enumerated(value = EnumType.STRING)
     private DegreeOfStudy degreeOfStudy;
+
     private String description;
+
     private String recruitmentRateTemplate;
 
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

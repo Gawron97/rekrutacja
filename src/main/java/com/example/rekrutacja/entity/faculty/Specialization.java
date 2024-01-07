@@ -1,5 +1,6 @@
 package com.example.rekrutacja.entity.faculty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,8 @@ public class Specialization {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "id_field_of_study")
+    @JsonBackReference
+    @JoinColumn(name = "id_field_of_study", nullable = false)
     private FieldOfStudy fieldOfStudy;
 
 }

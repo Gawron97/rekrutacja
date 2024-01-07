@@ -9,7 +9,7 @@ import com.example.rekrutacja.service.mapper.RecruitmentMapper;
 import com.example.rekrutacja.utils.exception.RecruitmentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +28,9 @@ public class RecruitmentService {
     /**
      * @param search search by fieldOfStudy name and cycle
      * */
-    public Page<RecruitmentShortDTO> getRecruitmentsShort(PageRequest pageable, String search) {
+    public Page<RecruitmentShortDTO> getRecruitmentsShort(Pageable pageable, String search) {
         return recruitmentRepository
-                .findRecruitmentsByFieldOfStudyOrCycleOrSpecializationName(search, pageable)
+                .findRecruitmentsByFieldOfStudyOrCycleOrSpecializationName("", pageable)
                 .map(r -> new RecruitmentShortDTO(r.getId(), createTitle(r)));
     }
 

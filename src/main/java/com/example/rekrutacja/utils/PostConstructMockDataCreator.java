@@ -16,10 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -98,18 +95,16 @@ public class PostConstructMockDataCreator {
     public void generateData() {
         generateEmployees();
         generateCandidates();
-        generateSpecialisations();
         generateCriteria();
         generateMaturaExam(5);
         generateDiplomaOfStudy(5);
         generateCertificate(5);
         List<Criteria> criteria = criteriaRepository.findAll();
-        generateFieldOfStudies(criteria);
+        generateFieldOfStudiesWithSpecializations(criteria);
         List<FieldOfStudy> fieldOfStudies = fieldOfStudyRepository.findAll();
         generateRecruitments(4, fieldOfStudies);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
         generateApplications(10, recruitments);
-        generateSpecializationsAndLinkToRecruitments(recruitments);
     }
 
     private LocalDate getRandomDateBetween(LocalDate minDate, LocalDate maxDate) {
@@ -172,15 +167,6 @@ public class PostConstructMockDataCreator {
 
         candidateRepository.save(candidate2);
 
-    }
-
-    private void generateSpecialisations() {
-        specialisationNames.forEach(specialisationName -> {
-            Specialization specialization = Specialization.builder()
-                    .name(specialisationName)
-                    .build();
-            specializationRepository.save(specialization);
-        });
     }
 
     private void generateCriteria() {
@@ -246,35 +232,48 @@ public class PostConstructMockDataCreator {
         }
     }
 
-    private void generateFieldOfStudies(List<Criteria> criterias) {
-        fieldOfStudyNames.forEach(fieldOfStudyName -> {
+    private void generateFieldOfStudiesWithSpecializations(List<Criteria> criterias) {
+        for (String fieldOfStudyName : fieldOfStudyNames) {
+            Specialization spec1 = createRandomSpecialization();
+            Specialization spec2 = createRandomSpecialization();
+            Specialization spec3 = createRandomSpecialization();
+
             FieldOfStudy fieldOfStudy = FieldOfStudy.builder()
                     .name(fieldOfStudyName)
                     .studyMode(StudyMode.FULL_TIME)
                     .degreeOfStudy(DegreeOfStudy.ENGINEERING)
-                    .specialisations(new HashSet<>())
                     .criterias(new HashSet<>())
                     .build();
 
-            for(int i=0; i<3; i++) {
+            for (int i = 0; i < 3; i++) {
                 fieldOfStudy.addCriteria(criterias.get(faker.number().numberBetween(0, criterias.size())));
             }
 
             fieldOfStudyRepository.save(fieldOfStudy);
-        });
+
+            spec1.setFieldOfStudy(fieldOfStudy);
+            spec2.setFieldOfStudy(fieldOfStudy);
+            spec3.setFieldOfStudy(fieldOfStudy);
+
+            specializationRepository.save(spec1);
+            specializationRepository.save(spec2);
+            specializationRepository.save(spec3);
+        }
     }
+
+    private Specialization createRandomSpecialization() {
+        return Specialization.builder()
+                .name("Specjalizacja " + faker.lorem().word())
+                .build();
+    }
+
 
     private void generateRecruitments(int quantity, List<FieldOfStudy> fieldOfStudies) {
         for(int i=0; i<quantity; i++) {
-            LocalDate startDate = getRandomDateBetween(LocalDate.of(2019, 01, 01),
-                    LocalDate.of(2023, 12, 12));
-            LocalDate endDate = getRandomDateBetween(startDate,
-                    LocalDate.of(2023, 12, 12));
-
             Recruitment recruitment = Recruitment.builder()
                     .cycle("2023/2024")
-                    .startDate(LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate.toEpochDay()), ZoneId.systemDefault()))
-                    .endDate(LocalDateTime.ofInstant(Instant.ofEpochMilli(endDate.toEpochDay()), ZoneId.systemDefault()))
+                    .startDate(LocalDate.now().minusDays(faker.number().numberBetween(1, 30)))
+                    .endDate(LocalDate.now().plusDays(faker.number().numberBetween(1, 30)))
                     .capacity(faker.number().numberBetween(1, 150))
                     .thresholdPoints(faker.number().randomDouble(2, 10, 100))
                     .fieldOfStudy(fieldOfStudies.get(faker.number().numberBetween(0, fieldOfStudies.size())))
@@ -282,17 +281,6 @@ public class PostConstructMockDataCreator {
 
             recruitmentRepository.save(recruitment);
         }
-
-
-    }
-
-    private void generateSpecializationsAndLinkToRecruitments(List<Recruitment> recruitments) {
-        List<Specialization> specializations = specializationRepository.findAll();
-        recruitments.forEach(recruitment -> {
-            Specialization specialization = specializations.get(faker.number().numberBetween(0, specializations.size()));
-            recruitment.setSpecialization(specialization);
-        });
-        recruitmentRepository.saveAll(recruitments);
     }
 
     private void generateSpecializations() {

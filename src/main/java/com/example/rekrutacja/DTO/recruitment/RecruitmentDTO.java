@@ -5,15 +5,15 @@ import com.example.rekrutacja.DTO.SpecializationDTO;
 import com.example.rekrutacja.utils.TimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record RecruitmentDTO(
         Long id,
         String cycle,
-        @JsonFormat(pattern = TimeFormat.DATE_TIME_FORMAT)
-        LocalDateTime startDate,
-        @JsonFormat(pattern = TimeFormat.DATE_TIME_FORMAT)
-        LocalDateTime endDate,
+        @JsonFormat(pattern = TimeFormat.DATE_FORMAT)
+        LocalDate startDate,
+        @JsonFormat(pattern = TimeFormat.DATE_FORMAT)
+        LocalDate endDate,
         Integer capacity,
         FieldOfStudyDTO fieldOfStudy,
         SpecializationDTO specialization,
