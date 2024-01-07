@@ -4,12 +4,14 @@ import com.example.rekrutacja.DTO.recruitment.RecruitmentDTO;
 import com.example.rekrutacja.DTO.recruitment.RecruitmentShortDTO;
 import com.example.rekrutacja.DTO.recruitment.RecruitmentRequest;
 import com.example.rekrutacja.entity.Recruitment;
+import com.example.rekrutacja.entity.faculty.FieldOfStudy;
 import com.example.rekrutacja.repository.RecruitmentRepository;
 import com.example.rekrutacja.service.mapper.RecruitmentMapper;
+import com.example.rekrutacja.utils.exception.FieldRequiredException;
 import com.example.rekrutacja.utils.exception.RecruitmentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,7 @@ public class RecruitmentService {
     /**
      * @param search search by fieldOfStudy name and cycle
      * */
-    public Page<RecruitmentShortDTO> getRecruitmentsShort(PageRequest pageable, String search) {
+    public Page<RecruitmentShortDTO> getRecruitmentsShort(Pageable pageable, String search) {
         return recruitmentRepository
                 .findRecruitmentsByFieldOfStudyOrCycleOrSpecializationName(search, pageable)
                 .map(r -> new RecruitmentShortDTO(r.getId(), createTitle(r)));
@@ -61,16 +63,8 @@ public class RecruitmentService {
         Recruitment recruitment = getRecruitmentById(id);
 
         recruitmentMapper.updateNonEntityFields(recruitment, newData);
-
-        if(!Objects.equals(recruitment.getFieldOfStudy().getId(), newData.fieldOfStudyId())) {
-            recruitment.setFieldOfStudy(fieldOfStudyService.getFieldOfStudyById(newData.fieldOfStudyId()));
-        }
-
-        if(recruitment.getSpecialization() != null) {
-            if(!Objects.equals(recruitment.getSpecialization().getId(), newData.specializationId())) {
-                recruitment.setSpecialization(specializationService.getSpecializationById(newData.specializationId()));
-            }
-        }
+        setFieldOfStudyIfIsChanged(recruitment, newData.fieldOfStudyId());
+        setSpecializationIfIsChanged(recruitment, newData.specializationId());
 
         recruitmentRepository.save(recruitment);
     }
@@ -82,7 +76,32 @@ public class RecruitmentService {
         if(recruitmentDTO.specializationId() != null)
             recruitment.setSpecialization(specializationService.getSpecializationById(recruitmentDTO.specializationId()));
 
+        checkRecruitmentShouldHaveSpecialization(recruitment);
         recruitmentRepository.save(recruitment);
+    }
+
+    private void setFieldOfStudyIfIsChanged(Recruitment recruitment, Long fieldOfStudyId) {
+        if(!Objects.equals(recruitment.getFieldOfStudy().getId(), fieldOfStudyId))
+            recruitment.setFieldOfStudy(fieldOfStudyService.getFieldOfStudyById(fieldOfStudyId));
+    }
+
+    private void setSpecializationIfIsChanged(Recruitment recruitment, Long specId) {
+        if(recruitment.getSpecialization() != null) {
+            if(!Objects.equals(recruitment.getSpecialization().getId(), specId)) {
+                recruitment.setSpecialization(specializationService.getSpecializationById(specId));
+            }
+        } else if(specId != null) {
+            recruitment.setSpecialization(specializationService.getSpecializationById(specId));
+        }
+
+        checkRecruitmentShouldHaveSpecialization(recruitment);
+    }
+
+    private void checkRecruitmentShouldHaveSpecialization(Recruitment recruitment) {
+        FieldOfStudy recruitmentFieldOfStudy = recruitment.getFieldOfStudy();
+
+        if(!recruitmentFieldOfStudy.getSpecializations().isEmpty() && recruitment.getSpecialization() == null)
+            throw new FieldRequiredException("Field of study has specializations so it cannot be null in recruitment");
     }
 
     private String createTitle(Recruitment recruitment) {

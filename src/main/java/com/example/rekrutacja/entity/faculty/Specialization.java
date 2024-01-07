@@ -17,8 +17,8 @@ public class Specialization {
     private Long id;
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "id_field_of_study")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_field_of_study", nullable = false)
     private FieldOfStudy fieldOfStudy;
 
 }

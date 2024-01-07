@@ -16,16 +16,21 @@ public class FieldOfStudy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     @Enumerated(value = EnumType.STRING)
     private StudyMode studyMode;
+
     @Enumerated(value = EnumType.STRING)
     private DegreeOfStudy degreeOfStudy;
+
     private String description;
+
     private String recruitmentRateTemplate;
 
-    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Set<Specialization> specialisations;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "id")
+    private Set<Specialization> specializations;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "field_of_studies_criterias",
@@ -34,7 +39,7 @@ public class FieldOfStudy {
     private Set<Criteria> criterias;
 
     public FieldOfStudy() {
-        specialisations = new HashSet<>();
+        specializations = new HashSet<>();
         criterias = new HashSet<>();
     }
 

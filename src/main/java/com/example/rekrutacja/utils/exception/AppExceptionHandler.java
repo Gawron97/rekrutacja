@@ -52,4 +52,9 @@ public class AppExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
 
+    @ExceptionHandler(FieldRequiredException.class)
+    public ResponseEntity<String> applicationNotFoundException(FieldRequiredException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
 }

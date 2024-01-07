@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -26,10 +26,10 @@ public class Recruitment {
     private String cycle;
 
     @Column(nullable = false)
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Column(nullable = false)
     private Integer capacity;
@@ -41,7 +41,7 @@ public class Recruitment {
     private FieldOfStudy fieldOfStudy;
 
     @OneToOne
-    @JoinColumn(name = "id_specialisation")
+    @JoinColumn(name = "id_specialization")
     private Specialization specialization;
 
     @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
