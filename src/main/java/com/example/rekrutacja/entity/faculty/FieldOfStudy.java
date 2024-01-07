@@ -29,8 +29,8 @@ public class FieldOfStudy {
 
     private String recruitmentRateTemplate;
 
-    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Set<Specialization> specialisations;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "id")
+    private Set<Specialization> specializations;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "field_of_studies_criterias",
@@ -39,7 +39,7 @@ public class FieldOfStudy {
     private Set<Criteria> criterias;
 
     public FieldOfStudy() {
-        specialisations = new HashSet<>();
+        specializations = new HashSet<>();
         criterias = new HashSet<>();
     }
 

@@ -20,7 +20,7 @@ public class Criteria {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "id_specialisation")
-    private Specialization specialisation;
+    @JoinColumn(name = "id_specialization")
+    private Specialization specialization;
 
 }

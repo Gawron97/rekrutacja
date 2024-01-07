@@ -41,7 +41,7 @@ public class Recruitment {
     private FieldOfStudy fieldOfStudy;
 
     @OneToOne
-    @JoinColumn(name = "id_specialisation")
+    @JoinColumn(name = "id_specialization")
     private Specialization specialization;
 
     @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

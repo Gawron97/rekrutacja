@@ -44,7 +44,7 @@ public class PostConstructMockDataCreator {
     private final SpecializationRepository specializationRepository;
 
     private final List<String> fieldOfStudyNames = List.of("Informatyka", "Matematyka", "Medycyna");
-    private final List<String> specialisationNames = List.of("Robotyka", "AI", "Design");
+    private final List<String> specializationNames = List.of("Robotyka", "AI", "Design");
     private final List<String> passingSubjectsNames = List.of("Matematyka", "Geografia", "Polski");
 
     @PostConstruct
@@ -284,9 +284,9 @@ public class PostConstructMockDataCreator {
     }
 
     private void generateSpecializations() {
-        specialisationNames.forEach(specialisationName -> {
+        specializationNames.forEach(specializationName -> {
             Specialization specialization = Specialization.builder()
-                    .name(specialisationName)
+                    .name(specializationName)
                     .build();
             specializationRepository.save(specialization);
         });

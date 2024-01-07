@@ -39,8 +39,6 @@ public class RecruitmentController {
         recruitmentService.deleteRecruitmentById(id);
     }
 
-
-    // TODO: if recruitment has specialization, then it has to be selected
     @PutMapping("/{id}")
     public void updateRecruitmentById(
             @PathVariable Long id,
