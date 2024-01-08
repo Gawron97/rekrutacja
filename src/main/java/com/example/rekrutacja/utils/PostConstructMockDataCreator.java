@@ -89,6 +89,7 @@ public class PostConstructMockDataCreator {
                 .role(role)
                 .pesel("12345678901")
                 .email(username + "@example.com")
+                .isEnabled(true)
                 .build();
     }
 

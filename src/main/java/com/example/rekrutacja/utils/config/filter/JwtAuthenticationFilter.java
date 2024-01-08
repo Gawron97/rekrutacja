@@ -1,6 +1,7 @@
 package com.example.rekrutacja.utils.config.filter;
 
 import com.example.rekrutacja.service.auth.JwtService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,13 +38,20 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
         }
 
         String jwt = authHeader.substring(7);
-        UserDetails user = userDetailsService.loadUserByUsername(jwtService.extractUsername(jwt));
+        Claims claims = jwtService.getClaims(jwt);
+        String username = String.valueOf(claims.get("username"));
+        UserDetails user = userDetailsService.loadUserByUsername(username);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                user,
+                username,
                 null,
                 user.getAuthorities()
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getServletPath().equals("/login");
     }
 }
