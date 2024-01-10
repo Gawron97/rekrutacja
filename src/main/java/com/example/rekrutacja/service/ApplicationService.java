@@ -34,7 +34,7 @@ public class ApplicationService {
         validateApprovedDocuments(candidate.getId());
         Set<PassingSubject> passedSubjects =
                 getPassedSubjectsAndValidateCriteria(recruitment.getFieldOfStudy().getId(), candidate.getId());
-        checkApplicationDuplicationForRecruitment(recruitment);
+        checkApplicationDuplicationForRecruitment(recruitment, candidate);
 
         Application newApplication = Application.builder()
                 .recruitmentIndicator(
@@ -52,8 +52,8 @@ public class ApplicationService {
 
     }
 
-    private void checkApplicationDuplicationForRecruitment(Recruitment recruitment) {
-        if(applicationRepository.existsByRecruitment(recruitment)) {
+    private void checkApplicationDuplicationForRecruitment(Recruitment recruitment, Candidate candidate) {
+        if(applicationRepository.existsByRecruitmentAndCandidate(recruitment, candidate)) {
             throw new ApplicationDuplicationException();
         }
     }
@@ -63,7 +63,8 @@ public class ApplicationService {
     }
 
     private void validateApprovedDocuments(Long candidateId) {
-        if(maturaExamRepository.checkIfAllDocumentsAreApprovedForCandidate(candidateId)) {
+        MaturaExam candidateMaturaExam = getCandidateMaturaExam(candidateId);
+        if(candidateMaturaExam.getDocumentStatus().equals(DocumentStatus.UNAPPROVED)) {
             throw new RuntimeException();
         }
     }
@@ -75,7 +76,7 @@ public class ApplicationService {
             passedSubjects = getPassedSubjectsNames(candidateId);
         } catch (MaturaExamNotFound e) {
             throw new CriteriaNotAchievedException(MessageFormat.format("Required criteria for" +
-                    " field of study with id: {0} not achieved", fieldOfStudyId));
+                    " field of study with id: {0} not achieved, candidate did not send matura exam", fieldOfStudyId));
         }
         Set<String> passedSubjectsName = passedSubjects.stream().map(PassingSubject::getName).collect(Collectors.toSet());
 
@@ -97,7 +98,7 @@ public class ApplicationService {
     }
 
     private MaturaExam getCandidateMaturaExam(Long candidateId) {
-        return maturaExamRepository.findAllByCandidateId(candidateId).orElseThrow(MaturaExamNotFound::new);
+        return maturaExamRepository.findByCandidateId(candidateId).orElseThrow(MaturaExamNotFound::new);
     }
 
     private List<Criteria> getCriterias(Long fieldOfStudyId) {

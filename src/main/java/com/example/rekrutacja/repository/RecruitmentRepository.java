@@ -10,6 +10,9 @@ import java.util.Optional;
 
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
 
+    @Query("SELECT r " +
+            "FROM Recruitment r " +
+            "WHERE r.fieldOfStudy.name = :name AND r.endDate > CURRENT_DATE")
     Optional<Recruitment> findRecruitmentByFieldOfStudy_Name(String name);
 
     @Query("""

@@ -5,6 +5,7 @@ import com.example.rekrutacja.DTO.ApplicationInfoDTO;
 import com.example.rekrutacja.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -18,8 +19,8 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApplicationDTO> addApplication(@RequestBody ApplicationDTO application, Principal principal) {
-        return ResponseEntity.ok(applicationService.addApplication(application, principal.getName()));
+    public ResponseEntity<ApplicationDTO> addApplication(@RequestBody ApplicationDTO application, Authentication authentication) {
+        return ResponseEntity.ok(applicationService.addApplication(application, authentication.getName()));
     }
 
     @GetMapping

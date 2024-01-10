@@ -96,15 +96,15 @@ public class PostConstructMockDataCreator {
         generateEmployees();
         generateCandidates();
         generateCriteria();
-        generateMaturaExam(5);
+        List<Candidate> candidates = candidateRepository.findAll();
+        generateMaturaExam(candidates);
         generateDiplomaOfStudy(5);
         generateCertificate(5);
         List<Criteria> criteria = criteriaRepository.findAll();
         generateFieldOfStudiesWithSpecializations(criteria);
         List<FieldOfStudy> fieldOfStudies = fieldOfStudyRepository.findAll();
-        generateRecruitments(4, fieldOfStudies);
+        generateRecruitments(fieldOfStudies);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
-        List<Candidate> candidates = candidateRepository.findAll();
         generateApplications(10, recruitments, candidates);
     }
 
@@ -189,11 +189,12 @@ public class PostConstructMockDataCreator {
 
     }
 
-    private void generateMaturaExam(int quantity) {
-        for(int i=0; i<quantity; i++) {
+    private void generateMaturaExam(List<Candidate> candidates) {
+        candidates.forEach(candidate -> {
             MaturaExam maturaExam = MaturaExam.builder()
                     .documentStatus(DocumentStatus.APPROVED)
                     .passingSubjects(new HashSet<>())
+                    .candidate(candidate)
                     .build();
 
             for(int j=0; j<3; j++) {
@@ -201,7 +202,7 @@ public class PostConstructMockDataCreator {
                 maturaExam.addPassingSubject(passingSubject);
             }
             maturaExamRepository.save(maturaExam);
-        }
+        });
     }
 
     private void generateDiplomaOfStudy(int quantity) {
@@ -269,19 +270,19 @@ public class PostConstructMockDataCreator {
     }
 
 
-    private void generateRecruitments(int quantity, List<FieldOfStudy> fieldOfStudies) {
-        for(int i=0; i<quantity; i++) {
+    private void generateRecruitments(List<FieldOfStudy> fieldOfStudies) {
+        fieldOfStudies.forEach(fieldOfStudy -> {
             Recruitment recruitment = Recruitment.builder()
                     .cycle("2023/2024")
                     .startDate(LocalDate.now().minusDays(faker.number().numberBetween(1, 30)))
                     .endDate(LocalDate.now().plusDays(faker.number().numberBetween(1, 30)))
                     .capacity(faker.number().numberBetween(1, 150))
                     .thresholdPoints(faker.number().randomDouble(2, 10, 100))
-                    .fieldOfStudy(fieldOfStudies.get(faker.number().numberBetween(0, fieldOfStudies.size())))
+                    .fieldOfStudy(fieldOfStudy)
                     .build();
 
             recruitmentRepository.save(recruitment);
-        }
+        });
     }
 
     private void generateSpecializations() {
