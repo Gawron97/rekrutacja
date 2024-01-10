@@ -104,7 +104,8 @@ public class PostConstructMockDataCreator {
         List<FieldOfStudy> fieldOfStudies = fieldOfStudyRepository.findAll();
         generateRecruitments(4, fieldOfStudies);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
-        generateApplications(10, recruitments);
+        List<Candidate> candidates = candidateRepository.findAll();
+        generateApplications(10, recruitments, candidates);
     }
 
     private LocalDate getRandomDateBetween(LocalDate minDate, LocalDate maxDate) {
@@ -292,7 +293,7 @@ public class PostConstructMockDataCreator {
         });
     }
 
-    private void generateApplications(int quantity, List<Recruitment> recruitments) {
+    private void generateApplications(int quantity, List<Recruitment> recruitments, List<Candidate> candidates) {
         for(int i=0; i<quantity; i++) {
             Application application = Application.builder()
                     .recruitmentIndicator(faker.number().randomDouble(2, 0, 100))
@@ -300,6 +301,7 @@ public class PostConstructMockDataCreator {
                     .applicationStatus(Arrays.stream(ApplicationStatus.values())
                             .toList().get(faker.number().numberBetween(0, ApplicationStatus.values().length)))
                     .recruitment(recruitments.get(faker.number().numberBetween(0, recruitments.size())))
+                    .candidate(candidates.get(faker.number().numberBetween(0, candidates.size())))
                     .build();
             applicationRepository.save(application);
         }
