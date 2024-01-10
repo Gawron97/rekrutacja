@@ -134,4 +134,7 @@ public class ApplicationService {
         return applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
     }
 
+    public List<Integer> getPreferences(String name) {
+        return applicationRepository.findPreferencesNumberByCandidate(getCandidateByLogin(name));
+    }
 }

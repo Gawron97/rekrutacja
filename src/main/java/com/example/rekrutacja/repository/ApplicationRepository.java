@@ -12,4 +12,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     Boolean existsByRecruitmentAndCandidate(Recruitment recruitment, Candidate candidate);
 
+    @Query("SELECT a.preferencesNumber " +
+            "FROM Application a " +
+            "WHERE a.candidate = :candidate")
+    List<Integer> findPreferencesNumberByCandidate(Candidate candidate);
+
 }

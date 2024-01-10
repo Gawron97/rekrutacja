@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -26,6 +25,11 @@ public class ApplicationController {
     @GetMapping
     public ResponseEntity<List<ApplicationInfoDTO>> getApplications() {
         return ResponseEntity.ok(applicationService.getApplications());
+    }
+
+    @GetMapping("/preferences")
+    public ResponseEntity<List<Integer>> getPreferences(Authentication authentication) {
+        return ResponseEntity.ok(applicationService.getPreferences(authentication.getName()));
     }
 
 }
