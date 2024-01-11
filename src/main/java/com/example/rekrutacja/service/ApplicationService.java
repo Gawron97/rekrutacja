@@ -9,6 +9,8 @@ import com.example.rekrutacja.entity.users.Candidate;
 import com.example.rekrutacja.repository.*;
 import com.example.rekrutacja.utils.exception.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -144,8 +146,8 @@ public class ApplicationService {
         return candidateRepository.findByLogin(login).orElseThrow(CandidateNotFoundException::new);
     }
 
-    public List<ApplicationInfoDTO> getApplications() {
-        return applicationRepository.findAll().stream().map(ApplicationInfoDTO::of).toList();
+    public Page<ApplicationInfoDTO> getApplications(Pageable pageable) {
+        return applicationRepository.findAll(pageable).map(ApplicationInfoDTO::of);
     }
 
     public ApplicationInfoDTO getApplicationDetails(Long id) {
