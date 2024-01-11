@@ -278,6 +278,7 @@ public class PostConstructMockDataCreator {
                     .studyMode(StudyMode.FULL_TIME)
                     .degreeOfStudy(DegreeOfStudy.ENGINEERING)
                     .criterias(new HashSet<>())
+                    .recruitmentRateTemplate("matematyka*2+polski+geografia")
                     .build();
 
             for (int i = 0; i < 3; i++) {

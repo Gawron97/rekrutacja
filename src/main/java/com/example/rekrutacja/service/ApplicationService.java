@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class ApplicationService {
         Application newApplication = Application.builder()
                 .recruitmentIndicator(
                         calculateRecruitmentIndicator(
-                                recruitment.getFieldOfStudy().getRecruitmentRateTemplate(), passedSubjects))
+                                recruitment.getFieldOfStudy().getRecruitmentRateTemplate(), getMap(passedSubjects)))
                 .preferencesNumber(application.getPreferencesNumber())
                 .applicationStatus(ApplicationStatus.SANDED)
                 .recruitment(recruitment)
@@ -52,14 +53,35 @@ public class ApplicationService {
 
     }
 
+    private Map<String, Double> getMap(Set<PassingSubject> passingSubjects) {
+
+        return passingSubjects.stream().map(passingSubject ->
+                Map.entry(passingSubject.getName().toLowerCase(), passingSubject.getResult()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    }
+
     private void checkApplicationDuplicationForRecruitment(Recruitment recruitment, Candidate candidate) {
         if(applicationRepository.existsByRecruitmentAndCandidate(recruitment, candidate)) {
             throw new ApplicationDuplicationException();
         }
     }
 
-    private Double calculateRecruitmentIndicator(String recruitmentRateTemplate, Set<PassingSubject> passedSubjects) {
-        return 10.0;
+    private Double calculateRecruitmentIndicator(String recruitmentRateTemplate, Map<String, Double> passedSubjects) {
+
+        Double result = 0.0;
+        String[] tokens = recruitmentRateTemplate.split("\\+");
+
+        for(String token : tokens) {
+            if(token.contains("*")) {
+                String[] subTokens = token.split("\\*");
+                result += passedSubjects.get(subTokens[0]) * Double.parseDouble(subTokens[1]);
+            } else {
+                result += passedSubjects.get(token);
+            }
+        }
+
+        return result;
     }
 
     private void validateApprovedDocuments(Long candidateId) {
