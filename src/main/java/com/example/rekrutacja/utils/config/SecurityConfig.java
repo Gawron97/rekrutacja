@@ -40,8 +40,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/test").permitAll()
-
+                        
+                        .requestMatchers("/recruitment/field-of-study/names").hasRole(AppUserRole.CANDIDATE.name())
                         .requestMatchers("/recruitment/**").hasRole(AppUserRole.ADMINISTRATION_EMPLOYEE.toString())
+
                         .anyRequest().permitAll() // This turns off security. TODO: turn on when required
                 )
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

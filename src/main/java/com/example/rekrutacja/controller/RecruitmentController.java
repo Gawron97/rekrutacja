@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/recruitment")
@@ -16,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;
+
+    @GetMapping("/field-of-study/names")
+    public ResponseEntity<List<String>> getFieldOfStudiesNames() {
+        return ResponseEntity.ok(recruitmentService.getActiveRecruitmentFieldOfStudiesNames());
+    }
 
     @GetMapping
     public Page<RecruitmentShortDTO> getRecruitments(

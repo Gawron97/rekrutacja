@@ -19,10 +19,6 @@ public class FieldOfStudyService {
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final FieldOfStudyMapper fieldOfStudyMapper = FieldOfStudyMapper.INSTANCE;
 
-    public List<String> getFieldOfStudiesNames() {
-        return fieldOfStudyRepository.findAll().stream().map(FieldOfStudy::getName).toList();
-    }
-
     public FieldOfStudy getFieldOfStudyById(Long id) {
         return fieldOfStudyRepository.findById(id).orElseThrow(
                 () -> new FieldOfStudyNotFoundException("Field of study with id " + id + " not found")

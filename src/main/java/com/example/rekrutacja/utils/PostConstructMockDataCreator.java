@@ -106,6 +106,39 @@ public class PostConstructMockDataCreator {
         generateRecruitments(fieldOfStudies);
         List<Recruitment> recruitments = recruitmentRepository.findAll();
         generateApplications(10, recruitments, candidates);
+        generateKujon();
+    }
+
+    private void generateKujon() {
+
+        Candidate candidate = Candidate.builder()
+                .name(faker.name().firstName())
+                .surname(faker.name().lastName())
+                .email(faker.internet().emailAddress())
+                .password(passwordEncoder.encode("1234"))
+                .login("kujon")
+                .role(AppUserRole.CANDIDATE)
+                .isEnabled(true)
+                .build();
+
+        candidateRepository.save(candidate);
+
+        MaturaExam maturaExam = MaturaExam.builder()
+                .documentStatus(DocumentStatus.APPROVED)
+                .passingSubjects(new HashSet<>())
+                .candidate(candidate)
+                .build();
+
+        passingSubjectsNames.forEach(passingSubjectsName -> {
+            PassingSubject passingSubject = PassingSubject.builder()
+                    .name(passingSubjectsName)
+                    .result(99.0)
+                    .build();
+            maturaExam.addPassingSubject(passingSubject);
+        });
+
+        maturaExamRepository.save(maturaExam);
+
     }
 
     private LocalDate getRandomDateBetween(LocalDate minDate, LocalDate maxDate) {
@@ -245,6 +278,7 @@ public class PostConstructMockDataCreator {
                     .studyMode(StudyMode.FULL_TIME)
                     .degreeOfStudy(DegreeOfStudy.ENGINEERING)
                     .criterias(new HashSet<>())
+                    .recruitmentRateTemplate("matematyka*2+polski+geografia")
                     .build();
 
             for (int i = 0; i < 3; i++) {

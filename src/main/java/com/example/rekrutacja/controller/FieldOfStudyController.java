@@ -44,9 +44,4 @@ public class FieldOfStudyController {
         return specializationService.getSpecializationsOfFieldOfStudy(pageable, id);
     }
 
-    @GetMapping("/names")
-    public ResponseEntity<List<String>> getFieldOfStudiesNames() {
-        return ResponseEntity.ok(fieldOfStudyService.getFieldOfStudiesNames());
-    }
-
 }
