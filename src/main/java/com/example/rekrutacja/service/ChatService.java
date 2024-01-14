@@ -7,6 +7,7 @@ import com.example.rekrutacja.repository.MessageRepository;
 import com.example.rekrutacja.service.auth.AppUserService;
 import com.example.rekrutacja.service.mapper.MessageMapper;
 import com.example.rekrutacja.utils.exception.BadActionException;
+import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,9 @@ public class ChatService {
     private final MessageMapper messageMapper = MessageMapper.INSTANCE;
 
     public Page<MessageDTO> getMessages(PageRequest pageable, Long firstUserId, String secondUsername) {
+        if(!appUserService.existsById(firstUserId))
+            throw new ResourceNotFoundException("User with id " + firstUserId + " not found");
+
         return messageRepository
                 .getMessageOfUsers(appUserService.getIdOfUserByUsername(secondUsername), firstUserId, pageable)
                 .map(messageMapper::mapToMessageDTO);

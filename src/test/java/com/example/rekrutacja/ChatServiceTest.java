@@ -6,6 +6,7 @@ import com.example.rekrutacja.repository.AppUserRepository;
 import com.example.rekrutacja.repository.MessageRepository;
 import com.example.rekrutacja.service.ChatService;
 import com.example.rekrutacja.utils.exception.BadActionException;
+import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,6 +84,14 @@ public class ChatServiceTest {
     }
 
     @Test
+    void sendMessageToSelf_shouldThrow() {
+        assertThrows(
+                BadActionException.class,
+                () -> chatService.sendMessageToUser(candidate.getId(), candidate.getLogin(), "")
+        );
+    }
+
+    @Test
     void findUsersMessages_foundAllMessages() {
         assertEquals(0, messageRepository.findAll().size());
 
@@ -95,10 +105,23 @@ public class ChatServiceTest {
     }
 
     @Test
-    void sendMessageToSelf_shouldThrow() {
+    void getUserMessages_noUserFound_shouldThrow() {
         assertThrows(
-                BadActionException.class,
-                () -> chatService.sendMessageToUser(candidate.getId(), candidate.getLogin(), "")
+                UsernameNotFoundException.class,
+                () -> chatService.getMessages(
+                        PageRequest.of(0, 10),
+                        candidate.getId(),
+                        "not existing user"
+                )
+        );
+
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> chatService.getMessages(
+                        PageRequest.of(0, 10),
+                        -1L,
+                        candidate.getUsername()
+                )
         );
     }
 }

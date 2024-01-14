@@ -34,14 +34,18 @@ public class AppUserService implements UserDetailsService {
     }
 
     public Long getIdOfUserByUsername(String username) {
-        return appUserRepository.findAppUserByLogin(username).orElseThrow(
+        return appUserRepository.findAppUserIdByLogin(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found")
-        ).getId();
+        );
     }
 
     public void changeActiveStatus(ActivityStatus status, String name) {
         AppUser user = getUserByUsername(name);
         user.setActivityStatus(status);
         appUserRepository.save(user);
+    }
+
+    public boolean existsById(Long id) {
+        return appUserRepository.existsById(id);
     }
 }

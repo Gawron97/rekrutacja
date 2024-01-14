@@ -13,5 +13,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             FROM Message m
             WHERE (m.sender.id = ?1 AND m.receiver.id = ?2) OR (m.sender.id = ?2 AND m.receiver.id = ?1)
             """)
-    Page<Message> getMessageOfUsers(Long firstUser, Long secondUser, PageRequest pageable);
+    Page<Message> getMessageOfUsers(Long firstUserId, Long secondUserId, PageRequest pageable);
 }
