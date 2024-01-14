@@ -19,4 +19,10 @@ public class AppUserService implements UserDetailsService {
                 () -> new UsernameNotFoundException("User not found")
         );
     }
+
+    public Long getIdOfUserByUsername(String username) {
+        return appUserRepository.findAppUserByLogin(username).orElseThrow(
+                () -> new UsernameNotFoundException("User not found")
+        ).getId();
+    }
 }

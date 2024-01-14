@@ -23,19 +23,31 @@ public class AppUser implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String pesel;
+
     private String surname;
+
     private String login;
+
     private String password;
+
     private String email;
+
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;
+
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT " + ActivityStatus.Names.ACTIVE_NAME)
+    @Enumerated(value = EnumType.STRING)
+    private ActivityStatus activityStatus;
+
     private Boolean isEnabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.toString()));
+        return List.of(new SimpleGrantedAuthority(role.roleName()));
     }
 
     @Override

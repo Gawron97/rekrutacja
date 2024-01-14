@@ -1,4 +1,4 @@
-package com.example.rekrutacja.entity;
+package com.example.rekrutacja.entity.chat;
 
 import com.example.rekrutacja.entity.users.AppUser;
 import jakarta.persistence.*;
@@ -16,14 +16,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Message {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String content;
-    private LocalDateTime submissionDate;
+
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "id_receiver", nullable = false)
     private AppUser receiver;
+
     @ManyToOne
     @JoinColumn(name = "id_sender", nullable = false)
     private AppUser sender;

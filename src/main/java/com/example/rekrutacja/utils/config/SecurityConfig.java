@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
@@ -42,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/test").permitAll()
 
-                        .requestMatchers("/recruitment/**").hasRole(AppUserRole.ADMINISTRATION_EMPLOYEE.name())
+                        .requestMatchers("/recruitment/**").hasRole(AppUserRole.ADMINISTRATION_EMPLOYEE.toString())
                         .anyRequest().permitAll() // This turns off security. TODO: turn on when required
                 )
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
