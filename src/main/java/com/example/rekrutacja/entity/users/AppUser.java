@@ -3,6 +3,7 @@ package com.example.rekrutacja.entity.users;
 import com.example.rekrutacja.entity.AppUserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -23,19 +24,32 @@ public class AppUser implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String pesel;
+
     private String surname;
+
     private String login;
+
     private String password;
+
     private String email;
+
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;
+
+    @Builder.Default
+    @Column(columnDefinition = "VARCHAR(30) DEFAULT " + "'" + ActivityStatus.Names.ACTIVE_NAME + "'")
+    @Enumerated(value = EnumType.STRING)
+    private ActivityStatus activityStatus = ActivityStatus.ACTIVE;
+
     private Boolean isEnabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.toString()));
+        return List.of(new SimpleGrantedAuthority(role.roleName()));
     }
 
     @Override

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
@@ -39,8 +40,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/test").permitAll()
+                        
                         .requestMatchers("/recruitment/field-of-study/names").hasRole(AppUserRole.CANDIDATE.name())
-                        .requestMatchers("/recruitment/**").hasRole(AppUserRole.ADMINISTRATION_EMPLOYEE.name())
+                        .requestMatchers("/recruitment/**").hasRole(AppUserRole.ADMINISTRATION_EMPLOYEE.toString())
+
                         .anyRequest().permitAll() // This turns off security. TODO: turn on when required
                 )
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -52,6 +55,16 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(
+                        AppUserRole.ADMIN.roleName() + " > " + AppUserRole.ADMINISTRATION_EMPLOYEE.roleName() + ", " +
+                        AppUserRole.ADMIN.roleName() + " > " + AppUserRole.CANDIDATE.roleName()
+        );
+        return roleHierarchy;
     }
 
     @Bean
