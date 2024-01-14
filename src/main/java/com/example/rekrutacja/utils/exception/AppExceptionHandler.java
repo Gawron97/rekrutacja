@@ -61,4 +61,9 @@ public class AppExceptionHandler {
     public ResponseEntity<String> resourceNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
+
+    @ExceptionHandler(BadActionException.class)
+    public ResponseEntity<String> badActionException(BadActionException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
 }

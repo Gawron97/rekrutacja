@@ -2,9 +2,11 @@ package com.example.rekrutacja.service;
 
 import com.example.rekrutacja.DTO.MessageDTO;
 import com.example.rekrutacja.entity.chat.Message;
+import com.example.rekrutacja.entity.users.AppUser;
 import com.example.rekrutacja.repository.MessageRepository;
 import com.example.rekrutacja.service.auth.AppUserService;
 import com.example.rekrutacja.service.mapper.MessageMapper;
+import com.example.rekrutacja.utils.exception.BadActionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,19 +27,20 @@ public class ChatService {
     }
 
     public void sendMessageToUser(Long receiverId, String senderUsername, String content) {
-        Message message = Message.builder()
-                .sender(appUserService.getUserByUsername(senderUsername))
-                .receiver(appUserService.getUserById(receiverId))
-                .content(content)
-                .build();
+        var sender = appUserService.getUserByUsername(senderUsername);
 
+        if (sender.getId().equals(receiverId))
+            throw new BadActionException("Receiver and sender cannot be the same person.");
+
+        var receiver = appUserService.getUserById(receiverId);
+        var message = createMessage(receiver, sender, content);
         messageRepository.save(message);
     }
 
-    private Message createMessage(Long receiverId, String senderUsername, String content) {
+    private Message createMessage(AppUser receiver, AppUser sender, String content) {
         return Message.builder()
-                .sender(appUserService.getUserByUsername(senderUsername))
-                .receiver(appUserService.getUserById(receiverId))
+                .sender(sender)
+                .receiver(receiver)
                 .content(content)
                 .build();
     }

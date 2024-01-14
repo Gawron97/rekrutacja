@@ -2,10 +2,8 @@ package com.example.rekrutacja.entity.chat;
 
 import com.example.rekrutacja.entity.users.AppUser;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Check;
 
 import java.time.LocalDateTime;
 
@@ -14,17 +12,21 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Check(constraints = "id_receiver <> id_sender")
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false, updatable = false)
-    private String content;
+    private String content = "";
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Builder.Default
+    @Setter(AccessLevel.NONE)
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "id_receiver", nullable = false, updatable = false)
