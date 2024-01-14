@@ -57,4 +57,8 @@ public class AppExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> resourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
 }

@@ -20,16 +20,18 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false, updatable = false)
     private String content;
 
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "id_receiver", nullable = false)
+    @JoinColumn(name = "id_receiver", nullable = false, updatable = false)
     private AppUser receiver;
 
     @ManyToOne
-    @JoinColumn(name = "id_sender", nullable = false)
+    @JoinColumn(name = "id_sender", nullable = false, updatable = false)
     private AppUser sender;
 
 }

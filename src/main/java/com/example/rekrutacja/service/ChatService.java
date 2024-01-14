@@ -1,7 +1,7 @@
 package com.example.rekrutacja.service;
 
-import com.example.rekrutacja.DTO.ChatRequest;
 import com.example.rekrutacja.DTO.MessageDTO;
+import com.example.rekrutacja.entity.chat.Message;
 import com.example.rekrutacja.repository.MessageRepository;
 import com.example.rekrutacja.service.auth.AppUserService;
 import com.example.rekrutacja.service.mapper.MessageMapper;
@@ -22,5 +22,23 @@ public class ChatService {
         return messageRepository
                 .getMessageOfUsers(appUserService.getIdOfUserByUsername(secondUsername), firstUserId, pageable)
                 .map(messageMapper::mapToMessageDTO);
+    }
+
+    public void sendMessageToUser(Long receiverId, String senderUsername, String content) {
+        Message message = Message.builder()
+                .sender(appUserService.getUserByUsername(senderUsername))
+                .receiver(appUserService.getUserById(receiverId))
+                .content(content)
+                .build();
+
+        messageRepository.save(message);
+    }
+
+    private Message createMessage(Long receiverId, String senderUsername, String content) {
+        return Message.builder()
+                .sender(appUserService.getUserByUsername(senderUsername))
+                .receiver(appUserService.getUserById(receiverId))
+                .content(content)
+                .build();
     }
 }

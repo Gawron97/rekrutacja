@@ -39,7 +39,7 @@ public class AppUser implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT " + ActivityStatus.Names.ACTIVE_NAME)
+    @Column(columnDefinition = "VARCHAR(30) DEFAULT " + "'" + ActivityStatus.Names.ACTIVE_NAME + "'")
     @Enumerated(value = EnumType.STRING)
     private ActivityStatus activityStatus;
 
