@@ -59,29 +59,44 @@ public class PostConstructMockDataCreator {
     }
 
     private void createUsers() {
-        var admin = createUserWithProperties(
+        Employee admin = createEmployeeWithProperties(
                 "admin",
                 "pass",
                 AppUserRole.ADMIN
         );
-        var user = createUserWithProperties(
+        AppUser user = createCandidateWithProperties(
                 "candidate",
-                "pass",
-                AppUserRole.CANDIDATE
+                "pass"
         );
-        var administration = createUserWithProperties(
+        Employee administration = createEmployeeWithProperties(
                 "administration",
                 "pass",
                 AppUserRole.ADMINISTRATION_EMPLOYEE
         );
 
-        userRepository.save(admin);
-        userRepository.save(user);
+        employeeRepository.save(admin);
         userRepository.save(administration);
+        userRepository.save(user);
     }
 
-    private AppUser createUserWithProperties(String username, String password, AppUserRole role) {
-        return AppUser.builder()
+    private AppUser createCandidateWithProperties(String username, String password) {
+        return Candidate.builder()
+                .name("name")
+                .surname("surname")
+                .login(username)
+                .password(passwordEncoder.encode(password))
+                .role(AppUserRole.CANDIDATE)
+                .pesel("12345678901")
+                .email(username + "@example.com")
+                .build();
+    }
+
+    private Employee createEmployeeWithProperties(String username, String password, AppUserRole role) {
+        if(role != AppUserRole.ADMINISTRATION_EMPLOYEE && role != AppUserRole.ADMIN)
+            throw new IllegalArgumentException("Employee must be either ADMINISTRATION_EMPLOYEE or RECRUITMENT_EMPLOYEE");
+
+        return Employee.builder()
+                .salary(1000.0)
                 .name("name")
                 .surname("surname")
                 .login(username)

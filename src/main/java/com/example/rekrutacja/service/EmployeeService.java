@@ -3,8 +3,8 @@ package com.example.rekrutacja.service;
 import com.example.rekrutacja.entity.users.ActivityStatus;
 import com.example.rekrutacja.entity.users.Employee;
 import com.example.rekrutacja.repository.EmployeeRepository;
+import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +21,7 @@ public class EmployeeService {
 
     public Employee getEmployeeByUsername(String username) {
         return employeeRepository.findEmployeeByLogin(username).orElseThrow(
-                () -> new UsernameNotFoundException("Employee with username " + username + " not found")
+                () -> new ResourceNotFoundException("Employee with username " + username + " not found")
         );
     }
 }
