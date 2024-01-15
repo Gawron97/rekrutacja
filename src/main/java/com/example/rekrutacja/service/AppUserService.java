@@ -1,6 +1,5 @@
-package com.example.rekrutacja.service.auth;
+package com.example.rekrutacja.service;
 
-import com.example.rekrutacja.entity.users.ActivityStatus;
 import com.example.rekrutacja.entity.users.AppUser;
 import com.example.rekrutacja.repository.AppUserRepository;
 import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
@@ -37,12 +36,6 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findAppUserIdByLogin(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found")
         );
-    }
-
-    public void changeActiveStatus(ActivityStatus status, String name) {
-        AppUser user = getUserByUsername(name);
-        user.setActivityStatus(status);
-        appUserRepository.save(user);
     }
 
     public boolean existsById(Long id) {

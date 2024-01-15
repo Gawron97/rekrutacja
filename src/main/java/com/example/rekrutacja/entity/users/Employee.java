@@ -1,10 +1,7 @@
 package com.example.rekrutacja.entity.users;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -14,9 +11,15 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Employee extends AppUser {
 
     private LocalDate employmentDate;
+
     private Double salary;
 
+    @Builder.Default
+    @Column(columnDefinition = "VARCHAR(30) DEFAULT " + "'" + ActivityStatus.Names.ACTIVE_NAME + "'")
+    @Enumerated(value = EnumType.STRING)
+    private ActivityStatus activityStatus = ActivityStatus.ACTIVE;
 }

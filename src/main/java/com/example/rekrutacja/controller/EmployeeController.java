@@ -1,7 +1,7 @@
 package com.example.rekrutacja.controller;
 
 import com.example.rekrutacja.entity.users.ActivityStatus;
-import com.example.rekrutacja.service.auth.AppUserService;
+import com.example.rekrutacja.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,16 +12,16 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
-public class AppUserController {
+@RequestMapping("/employee")
+public class EmployeeController {
 
-    private final AppUserService userService;
+    private final EmployeeService employeeService;
 
     @PatchMapping("/active-status")
     public void changeActiveStatus(
             @RequestParam ActivityStatus status,
             Principal principal
     ) {
-        userService.changeActiveStatus(status, principal.getName());
+        employeeService.changeActiveStatus(status, principal.getName());
     }
 }

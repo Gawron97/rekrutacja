@@ -4,7 +4,6 @@ import com.example.rekrutacja.DTO.MessageDTO;
 import com.example.rekrutacja.entity.chat.Message;
 import com.example.rekrutacja.entity.users.AppUser;
 import com.example.rekrutacja.repository.MessageRepository;
-import com.example.rekrutacja.service.auth.AppUserService;
 import com.example.rekrutacja.service.mapper.MessageMapper;
 import com.example.rekrutacja.utils.exception.BadActionException;
 import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
