@@ -1,7 +1,9 @@
 package com.example.rekrutacja.service.mapper;
 
+import com.example.rekrutacja.DTO.ChatParticipantDTO;
 import com.example.rekrutacja.DTO.MessageDTO;
 import com.example.rekrutacja.entity.chat.Message;
+import com.example.rekrutacja.entity.users.AppUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -14,4 +16,6 @@ public interface MessageMapper {
     @Mapping(source = "message.receiver.id", target = "receiverId")
     @Mapping(source = "message.sender.id", target = "senderId")
     MessageDTO mapToMessageDTO(Message message);
+
+    ChatParticipantDTO mapToChatParticipantDTO(AppUser user);
 }

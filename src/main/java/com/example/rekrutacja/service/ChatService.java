@@ -1,5 +1,6 @@
 package com.example.rekrutacja.service;
 
+import com.example.rekrutacja.DTO.ChatParticipantDTO;
 import com.example.rekrutacja.DTO.MessageDTO;
 import com.example.rekrutacja.entity.chat.Message;
 import com.example.rekrutacja.entity.users.AppUser;
@@ -10,6 +11,7 @@ import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,5 +48,12 @@ public class ChatService {
                 .receiver(receiver)
                 .content(content)
                 .build();
+    }
+
+    public Page<ChatParticipantDTO> getUsersChattingWith(Pageable pageable, String username) {
+        var userId = appUserService.getIdOfUserByUsername(username);
+        return messageRepository
+                .getUsersChattingWith(userId, pageable)
+                .map(messageMapper::mapToChatParticipantDTO);
     }
 }

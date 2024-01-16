@@ -1,7 +1,9 @@
 package com.example.rekrutacja.service;
 
+import com.example.rekrutacja.DTO.AppUserDTO;
 import com.example.rekrutacja.entity.users.AppUser;
 import com.example.rekrutacja.repository.AppUserRepository;
+import com.example.rekrutacja.service.mapper.AppUserMapper;
 import com.example.rekrutacja.utils.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
+    private final AppUserMapper appUserMapper = AppUserMapper.INSTANCE;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,6 +27,10 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findAppUserByLogin(username).orElseThrow(
                 () -> new UsernameNotFoundException("User with username " + username + " not found")
         );
+    }
+
+    public AppUserDTO getUserDetailsByUsername(String username) {
+        return appUserMapper.appUserToAppUserDTO(getUserByUsername(username));
     }
 
     public AppUser getUserById(Long id) {

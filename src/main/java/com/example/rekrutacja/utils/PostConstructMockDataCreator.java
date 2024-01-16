@@ -2,6 +2,7 @@ package com.example.rekrutacja.utils;
 
 import com.example.rekrutacja.entity.AppUserRole;
 import com.example.rekrutacja.entity.Recruitment;
+import com.example.rekrutacja.entity.chat.Message;
 import com.example.rekrutacja.entity.documents.*;
 import com.example.rekrutacja.entity.faculty.*;
 import com.example.rekrutacja.entity.users.AppUser;
@@ -42,6 +43,7 @@ public class PostConstructMockDataCreator {
     private final MaturaExamRepository maturaExamRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final SpecializationRepository specializationRepository;
+    private final MessageRepository messageRepository;
 
     private final List<String> fieldOfStudyNames = List.of("Informatyka", "Matematyka", "Medycyna");
     private final List<String> specializationNames = List.of("Robotyka", "AI", "Design");
@@ -77,6 +79,21 @@ public class PostConstructMockDataCreator {
         employeeRepository.save(admin);
         userRepository.save(administration);
         userRepository.save(user);
+
+        Message message1 = Message.builder()
+                .content("Hello from administration!")
+                .sender(administration)
+                .receiver(user)
+                .build();
+
+        Message message2 = Message.builder()
+                .content("Hello from candidate!")
+                .sender(user)
+                .receiver(administration)
+                .build();
+
+        messageRepository.save(message1);
+        messageRepository.save(message2);
     }
 
     private AppUser createCandidateWithProperties(String username, String password) {

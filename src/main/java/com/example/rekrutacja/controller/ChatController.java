@@ -1,5 +1,6 @@
 package com.example.rekrutacja.controller;
 
+import com.example.rekrutacja.DTO.ChatParticipantDTO;
 import com.example.rekrutacja.DTO.MessageContentDTO;
 import com.example.rekrutacja.DTO.MessageDTO;
 import com.example.rekrutacja.service.ChatService;
@@ -17,6 +18,18 @@ import java.security.Principal;
 public class ChatController {
 
     private final ChatService chatService;
+
+    @GetMapping("/chatting-with")
+    public Page<ChatParticipantDTO> getReceivers(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection,
+            Principal principal
+    ) {
+        var pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return chatService.getUsersChattingWith(pageable, principal.getName());
+    }
 
     @GetMapping("/{userId}")
     public Page<MessageDTO> getMessages(
