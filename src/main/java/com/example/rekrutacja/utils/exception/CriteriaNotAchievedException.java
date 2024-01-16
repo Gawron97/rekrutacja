@@ -9,7 +9,7 @@ public class CriteriaNotAchievedException extends RuntimeException {
     private final HttpStatus status;
 
     public CriteriaNotAchievedException() {
-        super("Required Criteria not achieved");
+        super("Nie spełniono kryteriów, aby rekrutować na wskazany kierunek");
         status = HttpStatus.BAD_REQUEST;
     }
 

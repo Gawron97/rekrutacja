@@ -89,7 +89,7 @@ public class ApplicationService {
     private void validateApprovedDocuments(Long candidateId) {
         MaturaExam candidateMaturaExam = getCandidateMaturaExam(candidateId);
         if(candidateMaturaExam.getDocumentStatus().equals(DocumentStatus.UNAPPROVED)) {
-            throw new RuntimeException();
+            throw new DocumentsUnapprovedException();
         }
     }
 
@@ -99,15 +99,13 @@ public class ApplicationService {
         try {
             passedSubjects = getPassedSubjectsNames(candidateId);
         } catch (MaturaExamNotFound e) {
-            throw new CriteriaNotAchievedException(MessageFormat.format("Required criteria for" +
-                    " field of study with id: {0} not achieved, candidate did not send matura exam", fieldOfStudyId));
+            throw new CriteriaNotAchievedException();
         }
         Set<String> passedSubjectsName = passedSubjects.stream().map(PassingSubject::getName).collect(Collectors.toSet());
 
         criterias.forEach(criteria -> {
             if(!passedSubjectsName.contains(criteria.getName())) {
-                throw new CriteriaNotAchievedException(MessageFormat.format("Required criteria for" +
-                        " field of study with id: {0} not achieved", fieldOfStudyId));
+                throw new CriteriaNotAchievedException();
             }
         });
         return passedSubjects;
