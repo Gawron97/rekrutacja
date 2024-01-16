@@ -45,12 +45,27 @@ public class ChatController {
     }
 
     @PostMapping("/{userId}")
-    public void sendMessageToUser(
+    public MessageDTO sendMessageToUser(
             @PathVariable Long userId,
             @RequestBody MessageContentDTO messageContentDTO,
             Principal principal
     ) {
-        chatService.sendMessageToUser(userId, principal.getName(), messageContentDTO.content());
+        return chatService.sendMessageToUser(userId, principal.getName(), messageContentDTO.content());
     }
 
+    @PostMapping("/pick-employee")
+    public MessageDTO sendMessageToAvailableEmployee(
+            Principal principal,
+            @RequestBody MessageContentDTO messageContentDTO
+    ) {
+        return chatService.sendMessageToAvailableEmployee(principal.getName(), messageContentDTO.content());
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteConversation(
+            @PathVariable Long userId,
+            Principal principal
+    ) {
+        chatService.deleteConversation(userId, principal.getName());
+    }
 }

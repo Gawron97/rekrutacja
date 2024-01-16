@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
@@ -32,4 +33,11 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
         )
         """)
     Page<AppUser> getUsersChattingWith(Long userId, Pageable pageable);
+
+    @Modifying
+    @Query("""
+            DELETE FROM Message m
+            WHERE (m.sender.id = ?1 AND m.receiver.id = ?2) OR (m.sender.id = ?2 AND m.receiver.id = ?1)
+            """)
+    void deleteConversation(Long userId, Long secondUserId);
 }

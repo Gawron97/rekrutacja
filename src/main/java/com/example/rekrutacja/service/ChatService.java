@@ -13,11 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ChatService {
 
+    private final EmployeeService employeeService;
     private final MessageRepository messageRepository;
     private final AppUserService appUserService;
     private final MessageMapper messageMapper = MessageMapper.INSTANCE;
@@ -31,7 +33,7 @@ public class ChatService {
                 .map(messageMapper::mapToMessageDTO);
     }
 
-    public void sendMessageToUser(Long receiverId, String senderUsername, String content) {
+    public MessageDTO sendMessageToUser(Long receiverId, String senderUsername, String content) {
         var sender = appUserService.getUserByUsername(senderUsername);
 
         if (sender.getId().equals(receiverId))
@@ -39,7 +41,30 @@ public class ChatService {
 
         var receiver = appUserService.getUserById(receiverId);
         var message = createMessage(receiver, sender, content);
-        messageRepository.save(message);
+        return messageMapper.mapToMessageDTO(messageRepository.save(message));
+    }
+
+    public MessageDTO sendMessageToAvailableEmployee(String name, String content) {
+        var employee = employeeService.getAvailableEmployee();
+
+        return sendMessageToUser(
+                employee.getId(),
+                name,
+                content
+        );
+    }
+
+    public Page<ChatParticipantDTO> getUsersChattingWith(Pageable pageable, String username) {
+        var userId = appUserService.getIdOfUserByUsername(username);
+        return messageRepository
+                .getUsersChattingWith(userId, pageable)
+                .map(messageMapper::mapToChatParticipantDTO);
+    }
+
+    @Transactional
+    public void deleteConversation(Long userId, String username) {
+        var secondUserId = appUserService.getIdOfUserByUsername(username);
+        messageRepository.deleteConversation(userId, secondUserId);
     }
 
     private Message createMessage(AppUser receiver, AppUser sender, String content) {
@@ -48,12 +73,5 @@ public class ChatService {
                 .receiver(receiver)
                 .content(content)
                 .build();
-    }
-
-    public Page<ChatParticipantDTO> getUsersChattingWith(Pageable pageable, String username) {
-        var userId = appUserService.getIdOfUserByUsername(username);
-        return messageRepository
-                .getUsersChattingWith(userId, pageable)
-                .map(messageMapper::mapToChatParticipantDTO);
     }
 }

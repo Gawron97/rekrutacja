@@ -66,4 +66,9 @@ public class AppExceptionHandler {
     public ResponseEntity<String> badActionException(BadActionException ex) {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
+
+    @ExceptionHandler(EmployeeNotAvailableException.class)
+    public ResponseEntity<String> employeeUnavailableException(EmployeeNotAvailableException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
 }
