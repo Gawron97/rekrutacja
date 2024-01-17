@@ -1,5 +1,6 @@
 package com.example.rekrutacja.repository;
 
+import com.example.rekrutacja.entity.AppUserRole;
 import com.example.rekrutacja.entity.users.ActivityStatus;
 import com.example.rekrutacja.entity.users.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> findEmployeeByLogin(String login);
 
-    Set<Employee> findEmployeeByActivityStatus(ActivityStatus status);
+    Set<Employee> findEmployeeByActivityStatusAndRole(ActivityStatus status, AppUserRole role);
 }

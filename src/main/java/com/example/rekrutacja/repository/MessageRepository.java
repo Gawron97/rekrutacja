@@ -1,6 +1,5 @@
 package com.example.rekrutacja.repository;
 
-import com.example.rekrutacja.DTO.ChatParticipantDTO;
 import com.example.rekrutacja.entity.chat.Message;
 import com.example.rekrutacja.entity.users.AppUser;
 import org.springframework.data.domain.Page;
@@ -40,4 +39,13 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             WHERE (m.sender.id = ?1 AND m.receiver.id = ?2) OR (m.sender.id = ?2 AND m.receiver.id = ?1)
             """)
     void deleteConversation(Long userId, Long secondUserId);
+
+    @Modifying
+    @Query(value = """
+                    DELETE FROM Message
+                    WHERE id_sender IN 
+                        (SELECT id FROM app_user WHERE login = ?1) OR id_receiver IN (SELECT id FROM app_user WHERE login = ?1)
+                    """,
+            nativeQuery = true)
+    void deleteAllMessagesOfUser(String username);
 }

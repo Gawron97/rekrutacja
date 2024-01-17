@@ -24,7 +24,7 @@ public class Employee extends AppUser {
     private LocalDateTime lastActivity = LocalDateTime.now();
 
     @Builder.Default
-    @Column(columnDefinition = "VARCHAR(30) DEFAULT " + "'" + ActivityStatus.Names.ACTIVE_NAME + "'")
+    @Column(columnDefinition = "VARCHAR(30) DEFAULT " + "'" + ActivityStatus.Names.INACTIVE_NAME + "'")
     @Enumerated(value = EnumType.STRING)
-    private ActivityStatus activityStatus = ActivityStatus.ACTIVE;
+    private ActivityStatus activityStatus = ActivityStatus.INACTIVE;
 }

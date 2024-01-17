@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -54,11 +55,15 @@ public class ChatController {
     }
 
     @PostMapping("/pick-employee")
+    @PreAuthorize("hasRole('ROLE_CANDIDATE')")
     public MessageDTO sendMessageToAvailableEmployee(
             Principal principal,
             @RequestBody MessageContentDTO messageContentDTO
     ) {
-        return chatService.sendMessageToAvailableEmployee(principal.getName(), messageContentDTO.content());
+        return chatService.deletePreviousConversationsAndSendMessageToEmployee(
+                principal.getName(),
+                messageContentDTO.content()
+        );
     }
 
     @DeleteMapping("/{userId}")

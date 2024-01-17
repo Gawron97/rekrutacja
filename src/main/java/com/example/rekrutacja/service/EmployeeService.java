@@ -1,5 +1,6 @@
 package com.example.rekrutacja.service;
 
+import com.example.rekrutacja.entity.AppUserRole;
 import com.example.rekrutacja.entity.users.ActivityStatus;
 import com.example.rekrutacja.entity.users.Employee;
 import com.example.rekrutacja.repository.EmployeeRepository;
@@ -33,8 +34,8 @@ public class EmployeeService {
         );
     }
 
-    public Employee getAvailableEmployee() {
-        return employeeRepository.findEmployeeByActivityStatus(ActivityStatus.ACTIVE).stream()
+    public Employee getAvailableAdministrationEmployee() {
+        return employeeRepository.findEmployeeByActivityStatusAndRole(ActivityStatus.ACTIVE, AppUserRole.ADMINISTRATION_EMPLOYEE).stream()
                 .filter(this::checkEmployeeAvailable)
                 .findFirst()
                 .orElseThrow(() -> new EmployeeNotAvailableException("No available employees found"));

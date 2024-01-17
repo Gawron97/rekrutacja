@@ -33,6 +33,22 @@ public class ChatService {
                 .map(messageMapper::mapToMessageDTO);
     }
 
+    @Transactional
+    public MessageDTO deletePreviousConversationsAndSendMessageToEmployee(String senderUsername, String content) {
+        deleteAllChatsOfUser(senderUsername);
+        return sendMessageToAvailableAdministrationEmployee(senderUsername, content);
+    }
+
+    @Transactional
+    public void deleteAllChatsOfUser(String username) {
+        messageRepository.deleteAllMessagesOfUser(username);
+    }
+
+    public MessageDTO sendMessageToAvailableAdministrationEmployee(String senderUsername, String content) {
+        var employee = employeeService.getAvailableAdministrationEmployee();
+        return sendMessageToUser(employee.getId(), senderUsername, content);
+    }
+
     public MessageDTO sendMessageToUser(Long receiverId, String senderUsername, String content) {
         var sender = appUserService.getUserByUsername(senderUsername);
 
@@ -42,16 +58,6 @@ public class ChatService {
         var receiver = appUserService.getUserById(receiverId);
         var message = createMessage(receiver, sender, content);
         return messageMapper.mapToMessageDTO(messageRepository.save(message));
-    }
-
-    public MessageDTO sendMessageToAvailableEmployee(String name, String content) {
-        var employee = employeeService.getAvailableEmployee();
-
-        return sendMessageToUser(
-                employee.getId(),
-                name,
-                content
-        );
     }
 
     public Page<ChatParticipantDTO> getUsersChattingWith(Pageable pageable, String username) {
