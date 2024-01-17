@@ -4,16 +4,16 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ApplicationDuplicationException extends RuntimeException {
+public class DocumentsUnapprovedException extends RuntimeException {
 
     private final HttpStatus status;
 
-    public ApplicationDuplicationException() {
-        super("Nie mozna zlozyc drugiego podania na ten sam kierunek");
+    public DocumentsUnapprovedException() {
+        super("Nie udalo się złożyć podania z powodu niezatwierdzonych dokumentów");
         status = HttpStatus.CONFLICT;
     }
 
-    public ApplicationDuplicationException(String message) {
+    public DocumentsUnapprovedException(String message) {
         super(message);
         status = HttpStatus.CONFLICT;
     }

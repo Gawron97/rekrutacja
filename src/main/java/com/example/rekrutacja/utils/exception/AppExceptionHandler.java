@@ -12,6 +12,11 @@ public class AppExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
 
+    @ExceptionHandler(DocumentsUnapprovedException.class)
+    public ResponseEntity<String> applicationNotFoundException(DocumentsUnapprovedException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
     @ExceptionHandler(ApplicationDuplicationException.class)
     public ResponseEntity<String> applicationNotFoundException(ApplicationDuplicationException ex) {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
