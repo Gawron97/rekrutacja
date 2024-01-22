@@ -1,6 +1,7 @@
 package com.example.rekrutacja.entity.users;
 
 import com.example.rekrutacja.entity.AppUserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class AppUser implements UserDetails {
 
     private String login;
 
+    @JsonIgnore
     private String password;
 
     private String email;
@@ -40,6 +43,8 @@ public class AppUser implements UserDetails {
     private AppUserRole role;
 
     private Boolean isEnabled;
+
+    private Timestamp dateOfBirth;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

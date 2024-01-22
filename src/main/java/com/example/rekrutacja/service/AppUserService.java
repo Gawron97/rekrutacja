@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AppUserService implements UserDetailsService {
@@ -40,5 +42,9 @@ public class AppUserService implements UserDetailsService {
 
     public boolean existsById(Long id) {
         return appUserRepository.existsById(id);
+    }
+
+    public List<AppUser> getAllUsersByNameAndSurname(String name, String surname) {
+        return appUserRepository.findAppUsersByNameAndSurname(name, surname);
     }
 }
