@@ -1,5 +1,6 @@
 package com.example.rekrutacja.controller;
 
+import com.example.rekrutacja.DTO.AppUserDTO;
 import com.example.rekrutacja.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,6 @@ import java.security.Principal;
 public class AppUserController {
 
     private final AppUserService appUserService;
-
 
     @GetMapping("/users")
     public ResponseEntity<List<AppUser>> getAllUsersByNameAndSurname(
